@@ -555,6 +555,7 @@ public class OderView {
                                                     foods.get(k).setQuantity(foods.get(k).getQuantity() - quantity);
                                                 }
                                             }
+                                            break;
                                         }
                                         else if (oderAll.get(i).getNameFood().equals(nameFood) && oderAll.get(i).getStatus().equals(EStatus.PAID)) {
                                             int quantity = 0;
@@ -606,6 +607,7 @@ public class OderView {
                                             oder.setCreateDateOder(new Date());
                                             oder.setStatus(EStatus.UNPAID);
                                             oderAll.add(oder);
+                                            break;
                                         }
                                         else if (!oderAll.get(i).getNameFood().equals(nameFood)) {
                                             int quantity = 0;
@@ -657,6 +659,7 @@ public class OderView {
                                             oder.setCreateDateOder(new Date());
                                             oder.setStatus(EStatus.UNPAID);
                                             oderAll.add(oder);
+                                            break;
                                         }
                                     }
                                 } else if (oderAll.isEmpty()) {
