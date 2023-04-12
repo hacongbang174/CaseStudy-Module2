@@ -1,6 +1,5 @@
 package view;
 
-import model.Food;
 import service.FileService;
 
 import java.io.IOException;
@@ -30,11 +29,18 @@ public class AdminView {
     }
     public void launcher() throws IOException {
         LoginView loginView = new LoginView();
+        int select = 0;
         boolean checkAction = false;
         do {
             menuAdminView();
             System.out.println("Chọn chức năng:");
-            int select = Integer.parseInt(scanner.nextLine());
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
             switch (select) {
                 case 1:
                     foodView.launcher();
@@ -48,58 +54,63 @@ public class AdminView {
                 case 4:
                     oderView.showTotalRevenue();
                     break;
+                case 5:
+                    Menu menu = new Menu();
+                    menu.login();
+                    break;
                 default:
-                    FoodView foodView = new FoodView();
-                    foodView.launcher();
+                    System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
                     break;
             }
             checkAction = checkActionContinue();
-        }while (checkAction);
+        }while (!checkAction);
     }
     public  void menuOderManager(){
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                              Giao diện quản lý đơn hàng                           ║");
-        System.out.println("                               ║                   [1] Xem danh sách đơn hàng                                      ║");
-        System.out.println("                               ║                   [2] Tìm kiếm đơn hàng theo tên khách hàng                       ║");
-        System.out.println("                               ║                   [3] Thêm đơn hàng vào danh sách đơn hàng                        ║");
-        System.out.println("                               ║                   [4] Chỉnh sửa đơn hàng theo id                                  ║");
-        System.out.println("                               ║                   [5] Xóa đơn hàng theo id                                        ║");
-        System.out.println("                               ║                   [6] Quay lại                                                    ║");
+        System.out.println("                               ║                       [1] Xem danh sách đơn hàng                                  ║");
+        System.out.println("                               ║                       [2] Tìm kiếm đơn hàng theo ID                               ║");
+        System.out.println("                               ║                       [3] Thêm đơn hàng vào danh sách đơn hàng                    ║");
+        System.out.println("                               ║                       [4] Xóa đơn hàng theo ID                                    ║");
+        System.out.println("                               ║                       [5] Quay lại                                                ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
     public void launcherOder() throws IOException {
         OderView oderView = new OderView();
+        int select = 0;
         boolean checkAction = false;
         do {
             menuOderManager();
             System.out.println("Chọn chức năng:");
-            int select = Integer.parseInt(scanner.nextLine());
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
             switch (select) {
                 case 1:
                     oderView.showOderAll();
                     break;
                 case 2:
-                    oderView.findOderByNameCustomer();
+                    oderView.findOderById();
                     break;
                 case 3:
                     oderView.addOder();
                     break;
                 case 4:
-                    oderView.editOder();
+                    oderView.deleteOderById();
                     break;
                 case 5:
-                    oderView.deleteOder();
-                    break;
-                case 6:
                     launcher();
                     break;
                 default:
-                    FoodView foodView = new FoodView();
-                    foodView.launcher();
+                    System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
                     break;
             }
             checkAction = checkActionContinue();
-        }while (checkAction);
+        }while (!checkAction);
     }
     public boolean checkActionContinue() {
         boolean checkActionContinue = false;
@@ -108,14 +119,18 @@ public class AdminView {
             String choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "Y":
-                    return true;
-                case "N":
                     return false;
+                case "N":
+                    return true;
                 default:
-                    checkActionContinue = true;
+                    checkActionContinue = false;
             }
-        } while (checkActionContinue);
-        return false;
+        } while (!checkActionContinue);
+        return true;
     }
 
+//    public static void main(String[] args) throws IOException {
+//        AdminView adminView = new AdminView();
+//        adminView.launcherOder();
+//    }
 }

@@ -59,4 +59,7 @@ public class OderService {
     public int checkNameFoodInOder(String nameFood) throws IOException {
         return oderRepository.checkName(nameFood);
     }
+    public int checkNameFoodInOderAll(String nameFood) throws IOException {
+        return oderAllRepository.checkName(nameFood);
+    }
 }

@@ -89,7 +89,7 @@ public class Food implements IModel<Food> {
        int id = Integer.parseInt(strings[0]);
        String name = strings[1];
        int quantity = Integer.parseInt(strings[2]);
-       Double price = Double.parseDouble(strings[3]);
+       Double price = CurrencyFormat.parseDouble(strings[3]);
        ETypeOfFood typeOfFood = ETypeOfFood.getTypeOfFoodByName(strings[4]);
        food.setIdFood(id);
        food.setNameFood(name);
@@ -103,6 +103,6 @@ public class Food implements IModel<Food> {
     }
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s", this.idFood, this.nameFood, this.quantity, CurrencyFormat.covertPriceToString(this.priceFood), this.eTypeOfFood.getName());
+        return String.format("%s,%s,%s,%s,%s", this.idFood, this.nameFood, this.quantity, this.priceFood, this.eTypeOfFood.getName());
     }
 }

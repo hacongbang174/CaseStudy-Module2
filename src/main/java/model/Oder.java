@@ -143,6 +143,6 @@ public class Oder implements IModel<Oder> {
     }
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", this.idOder, this.nameCustomer, this.nameFood, this.quantityFood, CurrencyFormat.covertPriceToString(this.priceFood), CurrencyFormat.covertPriceToString(this.totalMoney), DateFormat.convertDateToString2(this.createDateOder), this.status.getName());
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", this.idOder, this.nameCustomer, this.nameFood, this.quantityFood, this.priceFood, this.totalMoney, DateFormat.convertDateToString2(this.createDateOder), this.status.getName());
     }
 }

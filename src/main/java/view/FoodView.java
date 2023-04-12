@@ -43,10 +43,17 @@ public class FoodView {
 
     public void launcher() throws IOException {
         boolean checkAction = false;
+        int select = 0;
         do {
             menuFoodAdminView();
             System.out.println("Chọn chức năng:");
-            int select = Integer.parseInt(scanner.nextLine());
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
             switch (select) {
                 case 1:
                     showFoodList();
@@ -77,12 +84,15 @@ public class FoodView {
                     adminView.launcher();
                     break;
                 default:
-                    FoodView foodView = new FoodView();
-                    foodView.launcher();
+                    System.out.println("Nhập sai chức năng, mời nhập lại!");
                     break;
             }
             checkAction = checkActionContinue();
-        } while (checkAction);
+        } while (!checkAction);
+        if(checkAction) {
+            AdminView adminView = new AdminView();
+            adminView.launcher();
+        }
     }
 
     private void sortByIdDecrease() throws IOException {
@@ -104,9 +114,22 @@ public class FoodView {
     private void findFoodById() throws IOException {
         List<Food> foods = foodService.getAllFood();
         boolean checkAction = false;
+        noChange();
+        int id = 0;
         do {
             System.out.println("Nhập ID đồ uống, thức ăn bạn muốn tìm");
-            int id = Integer.parseInt(scanner.nextLine());
+            String input = scanner.nextLine();
+            if(input.equals("exit")) {
+                checkAction = true;
+                launcher();
+            }
+            try {
+                id = Integer.parseInt(input);
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
+                id = 0;
+                continue;
+            }
             switch (foodService.checkIdFood(id)) {
                 case 1:
                     for (int i = 0; i < foods.size(); i++) {
@@ -140,12 +163,25 @@ public class FoodView {
     }
 
     public void deleteFoodById() throws IOException {
+        showFoodList();
         List<Food> foods = foodService.getAllFood();
+        noChange();
         int id = 0;
         boolean checkID = false;
         do {
             System.out.println("Nhập ID đồ uống, thức ăn bạn muốn xóa:");
-            id = Integer.parseInt(scanner.nextLine());
+            String input = scanner.nextLine();
+            if(input.equals("exit")) {
+                checkID = true;
+                launcher();
+            }
+            try {
+                id = Integer.parseInt(input);
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("ID không hợp lệ vui lòng nhập lại!");
+                id = 0;
+                continue;
+            }
             int check = foodService.checkIdFood(id);
             switch (check) {
                 case 1:
@@ -163,11 +199,11 @@ public class FoodView {
     }
 
     public void editFoodById() throws IOException {
-
+        showFoodList();
         List<Food> foods = foodService.getAllFood();
         FoodView foodView = new FoodView();
         noChange();
-        int id;
+        int id = 0;
         boolean checkId = false;
         do {
             boolean checkAction = false;
@@ -177,7 +213,13 @@ public class FoodView {
                 checkId = true;
                 launcher();
             }
-            id = Integer.parseInt(input);
+            try {
+                id = Integer.parseInt(input);
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("ID không hợp lệ vui lòng nhập lại!");
+                id = 0;
+                continue;
+            }
             int check = foodService.checkIdFood(id);
             switch (check) {
                 case 1:
@@ -200,17 +242,22 @@ public class FoodView {
                                         break;
                                     case 2:
                                         noChange();
-                                        System.out.println("Nhập số lượng bạn muốn sửa:");
                                         int quantity = 0;
                                         boolean checkValid = false;
                                         do {
-                                            System.out.println("Nhập số lượng");
+                                            System.out.println("Nhập số lượng bạn muốn sửa:");
                                             String input1 = scanner.nextLine();
-                                            if(input.equals("exit")) {
+                                            if(input1.equals("exit")) {
                                                 checkId = true;
                                                 launcher();
                                             }
-                                            quantity = Integer.parseInt(input1);
+                                            try {
+                                                quantity = Integer.parseInt(input1);
+                                            } catch (NumberFormatException numberFormatException) {
+                                                System.out.println("Số không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
+                                                quantity = 0;
+                                                continue;
+                                            }
                                             checkValid = ValidateUtils.isQuantity(quantity);
                                             if (checkValid == false) {
                                                 System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
@@ -223,14 +270,20 @@ public class FoodView {
                                         double price = 0;
                                         boolean checkValid1 = false;
                                         do {
-                                            System.out.println("Nhập giá");
+                                            System.out.println("Nhập giá bạn muốn sửa");
                                             String input1 = scanner.nextLine();
-                                            if(input.equals("exit")) {
+                                            if(input1.equals("exit")) {
                                                 checkId = true;
                                                 launcher();
                                             }
-                                            price = Double.parseDouble(input1);
-                                            checkValid = ValidateUtils.isValidPrice(price);
+                                            try {
+                                                price = Double.parseDouble(input1);
+                                            } catch (NumberFormatException numberFormatException) {
+                                                System.out.println("Giá không hợp lệ vui lòng nhập lại! Giá từ 0-200.000đ");
+                                                price = 0;
+                                                continue;
+                                            }
+                                            checkValid1 = ValidateUtils.isValidPrice(price);
                                             if (checkValid1 == false) {
                                                 System.out.println("Giá không hợp lệ vui lòng nhập lại! Giá từ 0-200.000đ");
                                             }
@@ -245,17 +298,26 @@ public class FoodView {
                                             checkId = true;
                                             launcher();
                                         }
-                                        switch (type) {
-                                            case "drink":
-                                                break;
-                                            case "bakery":
-                                                break;
-                                            default:
-                                                System.out.println("Nhập sai, xin mời nhập lại (drink/bakery):");
-                                                type = scanner.nextLine();
-                                                break;
+                                        if (foods.get(i).geteTypeOfFood().equals(ETypeOfFood.DRINK)) {
+                                            switch (type) {
+                                                case "bakery":
+                                                    break;
+                                                default:
+                                                    System.out.println("Nhập sai, kiểu hiện tại là \"drink\"! Mời bạn nhập \"bakery\" hoặc quay lại!");
+                                                    type = scanner.nextLine();
+                                                    break;
+                                            }
+                                            foods.get(i).seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(type));
+                                        }else if(foods.get(i).geteTypeOfFood().equals(ETypeOfFood.BAKERY)){
+                                            switch (type) {
+                                                case "drink":
+                                                    break;
+                                                default:
+                                                    System.out.println("Nhập sai, kiểu hiện tại là \"bakery\"! Mời bạn nhập \"drink\" hoặc quay lại!");
+                                                    type = scanner.nextLine();
+                                                    break;
+                                            }
                                         }
-                                        foods.get(i).seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(type));
                                         break;
                                     case 5:
                                         foodView.editFoodById();
@@ -329,16 +391,22 @@ public class FoodView {
                             checkNameFood = true;
                             launcher();
                         }
-                        quantity = Integer.parseInt(input);
+                        try {
+                            quantity = Integer.parseInt(input);
+                        } catch (NumberFormatException numberFormatException) {
+                            System.out.println("Số không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
+                            quantity = 0;
+                            continue;
+                        }
                         checkValid = ValidateUtils.isQuantity(quantity);
                         if (checkValid == false) {
-                            System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
+                            System.out.println("Số không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
                         }
                     } while (checkValid == false);
                     int quantityNew = 0;
                     for (int i = 0; i < foods.size(); i++) {
                         if (foods.get(i).getNameFood().equals(name)) {
-                            quantityNew = foods.get(i).getQuantity() + quantity;
+                            quantityNew = foods.get(i).getQuantity() + quantity; //thiếu validate <= 1000
                             food.setIdFood(foods.get(i).getIdFood());
                             food.setNameFood(foods.get(i).getNameFood());
                             food.setQuantity(quantityNew);
@@ -359,10 +427,17 @@ public class FoodView {
                             checkNameFood = true;
                             launcher();
                         }
-                        quantity1 = Integer.parseInt(input);
+                        try {
+                            quantity1 = Integer.parseInt(input);
+                        } catch (NumberFormatException numberFormatException) {
+                            System.out.println("Số không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
+                            quantity1 = 0;
+                            continue;
+                        }
+
                         checkValid1 = ValidateUtils.isQuantity(quantity1);
                         if (checkValid1 == false) {
-                            System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
+                            System.out.println("Số không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
                         }
                     } while (!checkValid1);
 
@@ -375,7 +450,13 @@ public class FoodView {
                             checkNameFood = true;
                             launcher();
                         }
-                        price = Double.parseDouble(input);
+                        try {
+                            price = Double.parseDouble(input);
+                        } catch (NumberFormatException numberFormatException) {
+                            System.out.println("Giá không hợp lệ vui lòng nhập lại! Giá từ 0-200.000đ");
+                            price = 0;
+                            continue;
+                        }
                         checkValid2 = ValidateUtils.isValidPrice(price);     // false
                         if (checkValid2 == false) {
                             System.out.println("Giá không hợp lệ vui lòng nhập lại! Giá từ 0-200.000đ");
@@ -468,14 +549,14 @@ public class FoodView {
             String choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "Y":
-                    return true;
-                case "N":
                     return false;
+                case "N":
+                    return true;
                 default:
-                    checkActionContinue = true;
+                    checkActionContinue = false;
             }
-        } while (checkActionContinue);
-        return false;
+        } while (!checkActionContinue);
+        return true;
     }
 
     public void inputFoodPrice(Food food) {
@@ -540,7 +621,9 @@ public class FoodView {
     public static void main(String[] args) throws IOException {
         FoodView foodView = new FoodView();
 //        foodView.showFoodListByType();
-        foodView.addFood();
+//        foodView.addFood();
+//        foodView.editFoodById();
+//        foodView.findFoodById();
+        foodView.launcher();
     }
-
 }
