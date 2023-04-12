@@ -1,10 +1,10 @@
 package model;
 
 import repository.IModel;
+import utils.CurrencyFormat;
 import utils.DateFormat;
 
 import java.util.Date;
-import java.util.List;
 
 public class Oder implements IModel<Oder> {
     private int idOder;
@@ -14,12 +14,12 @@ public class Oder implements IModel<Oder> {
     private double priceFood;
     private double totalMoney;
     private Date createDateOder;
-
+    private EStatus status;
 
     public Oder() {
     }
 
-    public Oder(int idOder, String nameCustomer, String nameFood, int quantityFood, double priceFood, double totalMoney, Date createDateOder) {
+    public Oder(int idOder, String nameCustomer, String nameFood, int quantityFood, double priceFood, double totalMoney, Date createDateOder, EStatus status) {
         this.idOder = idOder;
         this.nameCustomer = nameCustomer;
         this.nameFood = nameFood;
@@ -27,6 +27,7 @@ public class Oder implements IModel<Oder> {
         this.priceFood = priceFood;
         this.totalMoney = totalMoney;
         this.createDateOder = createDateOder;
+        this.status = status;
     }
 
     public int getIdOder() {
@@ -85,6 +86,14 @@ public class Oder implements IModel<Oder> {
         this.createDateOder = createDateOder;
     }
 
+    public EStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EStatus status) {
+        this.status = status;
+    }
+
     @Override
     public int getId() {
         return idOder;
@@ -104,6 +113,7 @@ public class Oder implements IModel<Oder> {
         this.priceFood = obj.priceFood;
         this.totalMoney = obj.totalMoney;
         this.createDateOder = obj.createDateOder;
+        this.status = obj.status;
     }
 
     @Override
@@ -117,6 +127,7 @@ public class Oder implements IModel<Oder> {
         double priceFood = Double.parseDouble(strings[4]);
         double totalMoney = Double.parseDouble(strings[5]);
         Date createDateOder = DateFormat.parseDate2(strings[6]);
+        EStatus eStatus = EStatus.getStatusByName(strings[7]);
         oder.setIdOder(idOder);
         oder.setNameCustomer(nameCustomer);
         oder.setNameFood(nameFood);
@@ -124,13 +135,14 @@ public class Oder implements IModel<Oder> {
         oder.setPriceFood(priceFood);
         oder.setTotalMoney(totalMoney);
         oder.setCreateDateOder(createDateOder);
+        oder.setStatus(eStatus);
         return oder;
     }
     public String oderView() {
-        return String.format("            ║%7s║%-30s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║", this.idOder, this.nameCustomer, this.nameFood, this.quantityFood, this.priceFood, this.totalMoney, DateFormat.convertDateToString2(this.createDateOder));
+        return String.format("            ║%7s║%-30s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", this.idOder, this.nameCustomer, this.nameFood, this.quantityFood, CurrencyFormat.covertPriceToString(this.priceFood), CurrencyFormat.covertPriceToString(this.totalMoney), DateFormat.convertDateToString2(this.createDateOder), this.status.getName());
     }
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s,%s,%s", this.idOder, this.nameCustomer, this.nameFood, this.quantityFood, this.priceFood, this.totalMoney, DateFormat.convertDateToString2(this.createDateOder));
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", this.idOder, this.nameCustomer, this.nameFood, this.quantityFood, CurrencyFormat.covertPriceToString(this.priceFood), CurrencyFormat.covertPriceToString(this.totalMoney), DateFormat.convertDateToString2(this.createDateOder), this.status.getName());
     }
 }

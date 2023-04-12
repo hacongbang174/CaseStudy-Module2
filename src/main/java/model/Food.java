@@ -1,6 +1,7 @@
 package model;
 
 import repository.IModel;
+import utils.CurrencyFormat;
 
 import java.util.Currency;
 
@@ -98,10 +99,10 @@ public class Food implements IModel<Food> {
        return food;
     }
     public String foodView() {
-        return String.format("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", this.idFood, this.nameFood, this.quantity, this.priceFood, this.eTypeOfFood.getName());
+        return String.format("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", this.idFood, this.nameFood, this.quantity, CurrencyFormat.covertPriceToString(this.priceFood), this.eTypeOfFood.getName());
     }
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s", this.idFood, this.nameFood, this.quantity, this.priceFood, this.eTypeOfFood.getName());
+        return String.format("%s,%s,%s,%s,%s", this.idFood, this.nameFood, this.quantity, CurrencyFormat.covertPriceToString(this.priceFood), this.eTypeOfFood.getName());
     }
 }

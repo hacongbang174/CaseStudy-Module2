@@ -31,7 +31,7 @@ public class ValidateUtils {
         return false;
     }
     public static boolean isQuantity(int quantity) {
-        if(quantity >= 0 && quantity <= 1000) {
+        if(quantity > 0 && quantity <= 1000) {
             return true;
         }
         return false;

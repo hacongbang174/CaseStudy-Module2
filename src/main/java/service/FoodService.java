@@ -4,6 +4,7 @@ import model.ERole;
 import model.Food;
 import model.User;
 import repository.FoodRepository;
+import repository.FoodUpdateRepository;
 import repository.IModel;
 import repository.ISearch;
 
@@ -12,12 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FoodService {
-    private static FoodRepository foodRepository;
+    private  FoodRepository foodRepository;
+    private FoodUpdateRepository foodUpdateRepository;
     public FoodService() {
         foodRepository = new FoodRepository();
+        foodUpdateRepository = new FoodUpdateRepository();
     }
     public List<Food> getAllFood() throws IOException {
         return foodRepository.getAll();
+    }
+    public List<Food> getAllFoodUpdate() throws IOException {
+        return foodUpdateRepository.getAll();
     }
     public Food findFoodById(int id) throws IOException {
         return foodRepository.findById(id);
