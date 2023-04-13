@@ -33,11 +33,18 @@ public class Menu {
         do {
             menuLogin();
             try {
+                int select;
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("\nChọn chức năng ");
                 System.out.print("\t➺ ");
-                int number = Integer.parseInt(scanner.nextLine());
-                switch (number) {
+                try {
+                    select = Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException numberFormatException) {
+                    System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                    select = 0;
+                    continue;
+                }
+                switch (select) {
                     case 1:
                         admin();
                         break;
