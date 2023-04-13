@@ -8,8 +8,8 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        FoodInfo foodInfo = new FoodInfo();
-        foodInfo.foodInfo();
+//        FoodInfo foodInfo = new FoodInfo();
+//        foodInfo.foodInfo();
         Menu menu = new Menu();
         menu.login();
     }

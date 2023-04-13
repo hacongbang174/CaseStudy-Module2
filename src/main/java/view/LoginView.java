@@ -19,12 +19,14 @@ import java.util.UUID;
 public class LoginView {
     private final String FILE_PATH_USER = "./src/main/data/user.csv";
     private final String FILE_PATH_USERUSE = "./src/main/data/userUse.csv";
+    private Menu menu;
     private static User currentUser = null;
     private UserService userService;
     private FileService fileService;
     private Scanner scanner;
 
     public LoginView() {
+        menu = new Menu();
         userService = new UserService();
         fileService = new FileService();
         scanner = new Scanner(System.in);
@@ -33,9 +35,9 @@ public class LoginView {
     public void menuLoginAdmin() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                                                                                   ║");
-        System.out.println("                               ║                          WELCOME TO COFFE MANAGEMENT SYSTEM                       ║");
-        System.out.println("                               ║-----------------------------------ADMIN LOGIN PANEL-------------------------------║");
-        System.out.println("                               ║                                 Login now to admin!!!                             ║");
+        System.out.println("                               ║                            HỆ THỐNG QUẢN LÝ PHÚC LONG COFFEE!                     ║");
+        System.out.println("                               ║------------------------------BẢNG ĐIỀU KHIỂN ĐĂNG NHẬP ADMIN----------------------║");
+        System.out.println("                               ║                             Đăng nhập bằng tài khoản admin!!!                     ║");
         System.out.println("                               ║                                                                                   ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
         System.out.println();
@@ -45,9 +47,9 @@ public class LoginView {
     public void menuLoginCustomer() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                                                                                   ║");
-        System.out.println("                               ║                              WELCOME TO PHUC LONG COFFEE!                         ║");
-        System.out.println("                               ║------------------------------- --CUSTOMER LOGIN PANEL--------- -------------------║");
-        System.out.println("                               ║                                Login now to customer!!!                           ║");
+        System.out.println("                               ║                           HỆ THỐNG QUẢN LÝ PHÚC LONG COFFEE!                      ║");
+        System.out.println("                               ║-----------------------------BẢNG ĐIỀU KHIỂN ĐĂNG NHẬP ADMIN-----------------------║");
+        System.out.println("                               ║                          Đăng nhập bằng tài khoản khách hàng!!!                   ║");
         System.out.println("                               ║                                                                                   ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
         System.out.println();
@@ -55,37 +57,55 @@ public class LoginView {
     }
 
     public void loginAdmin() throws IOException {
+        int count = 0;
         menuLoginAdmin();
-        boolean checkInfoLogin;
         do {
-            System.out.println("Enter username:");
+            System.out.println("Nhập tên đăng nhập:");
             String username = scanner.nextLine();
-            System.out.println("Enter password:");
+            if (username.equals("exit")) {
+                count = 3;
+                menu.login();
+            }
+            System.out.println("Nhập mật khẩu:");
             String password = scanner.nextLine();
-            checkInfoLogin = userService.checkLoginAdmin(username, password);
+            if (password.equals("exit")) {
+                count = 3;
+                menu.login();
+            }
+            boolean checkInfoLogin = userService.checkLoginAdmin(username, password);
             if (!checkInfoLogin) {
-                System.out.println("Incorrect username or incorrect password. Please re-enter");
-                loginAdmin();
-            }else  {
+                System.out.println("Tài khoản hoặc mật khẩu không đúng. Vui lòng nhập lại!");
+                count++;
+            } else {
                 AdminView adminView = new AdminView();
                 adminView.launcher();
             }
-        } while (checkInfoLogin);
-
+        } while (count != 3);
+        if (count == 3) {
+            menu.login();
+        }
     }
 
     public void loginCustomer() throws IOException {
+        int count = 0;
         menuLoginCustomer();
-        boolean checkInfoLogin;
         do {
-            System.out.println("Enter username:");
+            System.out.println("Nhập tên đăng nhập:");
             String username = scanner.nextLine();
-            System.out.println("Enter password:");
+            if (username.equals("exit")) {
+                count = 3;
+                menu.login();
+            }
+            System.out.println("Nhập mật khẩu:");
             String password = scanner.nextLine();
-            checkInfoLogin = userService.checkLoginCustomer(username, password);
+            if (password.equals("exit")) {
+                count = 3;
+                menu.login();
+            }
+            boolean checkInfoLogin = userService.checkLoginCustomer(username, password);
             if (!checkInfoLogin) {
-                System.out.println("Incorrect username or incorrect password. Please re-enter");
-                loginCustomer();
+                System.out.println("Tài khoản hoặc mật khẩu không đúng. Vui lòng nhập lại!");
+                count++;
             } else {
                 List<User> userList = new ArrayList<>();
                 User user = userService.loginCustomer(username, password);
@@ -94,7 +114,10 @@ public class LoginView {
                 CustomerView customerView = new CustomerView();
                 customerView.launcher();
             }
-        } while (checkInfoLogin);
+        } while (count != 3);
+        if (count == 3) {
+            menu.login();
+        }
     }
 
     public static boolean checkLogin() {
@@ -106,6 +129,7 @@ public class LoginView {
     }
 
     public void signUp() throws IOException {
+        noChange();
         List<User> userList = userService.getAllUser();
         userList.sort(new SortUserById());
         User user = new User();
@@ -115,29 +139,49 @@ public class LoginView {
         inputUserName(user);
         System.out.println("Nhập password của bạn:");
         String password = scanner.nextLine();
+        if (password.equals("exit")) {
+            menu.login();
+        }
         System.out.println("Nhập họ và tên của bạn:");
         String fullName = scanner.nextLine();
-        inputPhoneNumber(user);
-        System.out.println("Nhập giới tính của bạn: male/female/other");
-        String gender = scanner.nextLine();
-        switch (gender) {
-            case "male":
-                break;
-            case "female":
-                break;
-            case "other":
-                break;
-            default:
-                System.out.println("Nhập sai, xin mời nhập lại (male/female/other):");
-                gender = scanner.nextLine();
-                break;
+        if (fullName.equals("exit")) {
+            menu.login();
         }
+        inputPhoneNumber(user);
+        boolean checkGender = false;
+        String gender = null;
+        do {
+            System.out.println("Nhập giới tính của bạn: male/female/other");
+            gender = scanner.nextLine();
+            switch (gender) {
+                case "male":
+                    break;
+                case "female":
+                    break;
+                case "other":
+                    break;
+                case "exit":
+                    checkGender = true;
+                    menu.login();
+                    break;
+                default:
+                    System.out.println("Nhập sai, xin mời nhập lại (male/female/other):");
+                    break;
+            }
+        } while (!checkGender);
+
         inputCCCD(user);
         System.out.println("Nhập ngày tháng năm sinh: dd/MM/yyyy");
         String date = scanner.nextLine();
+        if (date.equals("exit")) {
+            menu.login();
+        }
         inputEmail(user);
         System.out.println("Nhập địa chỉ của bạn:");
         String address = scanner.nextLine();
+        if (address.equals("exit")) {
+            menu.login();
+        }
         user.setId(userList.get(userList.size() - 1).getId() + 1);
         user.setPassword(password);
         user.setFullName(fullName);
@@ -154,98 +198,132 @@ public class LoginView {
     public void inputEmail(User user) throws IOException {
         String email;
         boolean checkValid = false;
-        boolean checkEmail = true;
+        boolean checkEmail = false;
         do {
             do {
                 System.out.println("Nhập Email của bạn:");
                 email = scanner.nextLine();
+                if (email.equals("exit")) {
+                    checkEmail = true;
+                    menu.login();
+                }
                 checkValid = ValidateUtils.isEmail(email);
-                if (checkValid == false) {
+                if (!checkValid) {
                     System.out.println("Email không hợp lệ vui lòng nhập lại!");
                 }
             } while (!checkValid);
-            checkEmail = userService.checkEmail(email);
-            if (checkEmail) {
+            boolean checkEmailAvailable = userService.checkEmail(email);
+            if (checkEmailAvailable) {
                 System.out.println("Email đã tồn tại vui lòng nhập lại!");
+                checkEmail = false;
+            }else {
+                checkEmail = true;
             }
-        } while (checkEmail);
+        } while (!checkEmail);
         user.setEmail(email);
     }
 
     public void inputCCCD(User user) throws IOException {
         String cccd;
         boolean checkValid = false;
-        boolean checkCCCD = true;
+        boolean checkCCCD = false;
         do {
             do {
                 System.out.println("Nhập số CCCD của bạn:");
                 cccd = scanner.nextLine();
+                if(cccd.equals("exit")) {
+                    checkCCCD = true;
+                    menu.login();
+                }
                 checkValid = ValidateUtils.isCCCD(cccd);
-                if (checkValid == false) {
+                if (!checkValid) {
                     System.out.println("Số CCCD không hợp lệ vui lòng nhập lại!");
                 }
             } while (!checkValid);
-            checkCCCD = userService.checkCCCD(cccd);
-            if (checkCCCD) {
+            boolean checkCCCDAvailable = userService.checkCCCD(cccd);
+            if (checkCCCDAvailable) {
                 System.out.println("Số CCCD đã tồn tại vui lòng nhập lại!");
+                checkCCCD = false;
+            }else {
+                checkCCCD = true;
             }
-        } while (checkCCCD);
+        } while (!checkCCCD);
         user.setCccd(cccd);
     }
 
     public void inputPhoneNumber(User user) throws IOException {
         String phoneNumber = null;
         boolean checkValid = false;
-        boolean checkPhoneNumber = true;
+        boolean checkPhoneNumber = false;
         do {
             do {
                 System.out.println("Nhập số điện thoại của bạn:");
                 phoneNumber = scanner.nextLine();
+                if(phoneNumber.equals("exit")) {
+                    checkPhoneNumber = true;
+                    menu.login();
+                }
                 checkValid = ValidateUtils.isPhoneNumber(phoneNumber);
                 if (checkValid == false) {
                     System.out.println("Số điện thoại không hợp lệ vui lòng nhập lại!");
                 }
             } while (!checkValid);
-            checkPhoneNumber = userService.checkPhoneNumber(phoneNumber);
-            if (checkPhoneNumber) {
+            boolean checkPhoneNumberAvailable = userService.checkPhoneNumber(phoneNumber);
+            if (checkPhoneNumberAvailable) {
                 System.out.println("Số điện thoại đã tồn tại vui lòng nhập lại!");
+                checkPhoneNumber = false;
+            }else {
+                checkPhoneNumber = true;
             }
-        } while (checkPhoneNumber);
+        } while (!checkPhoneNumber);
         user.setPhoneNumber(phoneNumber);
     }
 
     public void inputUserName(User user) throws IOException {
+        Menu menu = new Menu();
         String username = null;
         boolean checkValid = false;
-        boolean checkUserName = true;
+        boolean checkUserName = false;
         do {
             do {
-                System.out.println("Nhập username của bạn:");
+                System.out.println("Nhập username của bạn (5 đến 18 kí tự)");
                 username = scanner.nextLine();
+                if (username.equals("exit")) {
+                    checkUserName = true;
+                    menu.login();
+                }
                 checkValid = ValidateUtils.isUserName(username);
-                if (checkValid == false) {
+                if (!checkValid) {
                     System.out.println("UserName không hợp lệ vui lòng nhập lại!");
                 }
             } while (!checkValid);
-            checkUserName = userService.checkUserName(username);
-            if (checkUserName) {
+            boolean checkUserNameAvailable = userService.checkUserName(username);
+            if (checkUserNameAvailable) {
                 System.out.println("UserName đã tồn tại vui lòng nhập lại!");
+                checkUserName = false;
+            }else {
+                checkUserName = true;
             }
-        } while (checkUserName);
+        } while (!checkUserName);
         user.setUsername(username);
     }
 
     public void editPassWord() throws IOException {
+        Menu menu = new Menu();
         List<User> users = userService.getAllUserUse();
-        List<User>  userList = userService.getAllUser();
+        List<User> userList = userService.getAllUser();
 
         String password = null;
         String passwordNew = null;
         String passwordNew1 = null;
-        boolean checkPassword = true;
+        boolean checkPassword = false;
         do {
             System.out.println("Nhập password hiện tại của bạn:");
             password = scanner.nextLine();
+            if (password.equals("exit")) {
+                checkPassword = true;
+                menu.menuLogin();
+            }
             checkPassword = userService.checkPassword(password);
             if (checkPassword == false) {
                 System.out.println("Password không đúng, vui lòng nhập lại!");
@@ -262,8 +340,8 @@ public class LoginView {
             }
         } while (!checkPassword);
         users.get(0).setPassword(passwordNew);
-        for (int i = 0; i < userList.size(); i++){
-            if(userList.get(i).getUsername().equals(users.get(0).getUsername())){
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUsername().equals(users.get(0).getUsername())) {
                 userList.get(i).setPassword(passwordNew);
             }
         }
@@ -274,27 +352,34 @@ public class LoginView {
 
     public void editPhoneNumber() throws IOException {
         List<User> users = userService.getAllUserUse();
-        List<User>  userList = userService.getAllUser();
+        List<User> userList = userService.getAllUser();
         String phoneNumber = null;
         boolean checkValid = false;
-        boolean checkPhoneNumber = true;
+        boolean checkPhoneNumber = false;
         do {
             do {
                 System.out.println("Nhập số điện thoại mới của bạn:");
                 phoneNumber = scanner.nextLine();
+                if (phoneNumber.equals("exit")) {
+                    checkPhoneNumber = true;
+                    menu.menuLogin();
+                }
                 checkValid = ValidateUtils.isPhoneNumber(phoneNumber);
-                if (checkValid == false) {
+                if (!checkValid) {
                     System.out.println("Số điện thoại không hợp lệ vui lòng nhập lại!");
                 }
             } while (!checkValid);
-            checkPhoneNumber = userService.checkPhoneNumber(phoneNumber);
-            if (checkPhoneNumber) {
+            boolean checkPhoneNumberAvailable = userService.checkPhoneNumber(phoneNumber);
+            if (checkPhoneNumberAvailable) {
                 System.out.println("Số điện thoại đã tồn tại vui lòng nhập lại!");
+                checkPhoneNumber = false;
+            }else {
+                checkPhoneNumber = true;
             }
-        } while (checkPhoneNumber);
+        } while (!checkPhoneNumber);
         users.get(0).setPhoneNumber(phoneNumber);
-        for (int i = 0; i < userList.size(); i++){
-            if(userList.get(i).getUsername().equals(users.get(0).getUsername())){
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUsername().equals(users.get(0).getUsername())) {
                 userList.get(i).setPhoneNumber(phoneNumber);
             }
         }
@@ -305,7 +390,7 @@ public class LoginView {
 
     public void editEmail() throws IOException {
         List<User> users = userService.getAllUserUse();
-        List<User>  userList = userService.getAllUser();
+        List<User> userList = userService.getAllUser();
         String email;
         boolean checkValid = false;
         boolean checkEmail = true;
@@ -313,6 +398,10 @@ public class LoginView {
             do {
                 System.out.println("Nhập Email của bạn:");
                 email = scanner.nextLine();
+                if (email.equals("exit")) {
+                    checkEmail = false;
+                    menu.menuLogin();
+                }
                 checkValid = ValidateUtils.isEmail(email);
                 if (checkValid == false) {
                     System.out.println("Email không hợp lệ vui lòng nhập lại!");
@@ -324,8 +413,8 @@ public class LoginView {
             }
         } while (checkEmail);
         users.get(0).setEmail(email);
-        for (int i = 0; i < userList.size(); i++){
-            if(userList.get(i).getUsername().equals(users.get(0).getUsername())){
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUsername().equals(users.get(0).getUsername())) {
                 userList.get(i).setEmail(email);
             }
         }
@@ -336,12 +425,15 @@ public class LoginView {
 
     public void editAddress() throws IOException {
         List<User> users = userService.getAllUserUse();
-        List<User>  userList = userService.getAllUser();
+        List<User> userList = userService.getAllUser();
         System.out.println("Nhập Email của bạn:");
         String address = scanner.nextLine();
+        if (address.equals("exit")) {
+            menu.menuLogin();
+        }
         users.get(0).setAddress(address);
-        for (int i = 0; i < userList.size(); i++){
-            if(userList.get(i).getUsername().equals(users.get(0).getUsername())){
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUsername().equals(users.get(0).getUsername())) {
                 userList.get(i).setEmail(address);
             }
         }
@@ -358,6 +450,7 @@ public class LoginView {
         System.out.printf(users.get(0).userView()).println();
         System.out.println("            ╚═══════╩═══════════════╩═════════════════════╩════════════════╩════════════════╩═══════════════╩════════════════╩═════════════════════════════════════╩═══════════════════════════════╝");
     }
+
     public void showInfoCustomer() throws IOException {
         List<User> users = userService.getCustomerList();
         System.out.println("            ╔═══════╦═══════════════╦═════════════════════╦════════════════╦════════════════╦═══════════════╦════════════════╦═════════════════════════════════════╦═══════════════════════════════╗");
@@ -365,6 +458,9 @@ public class LoginView {
         System.out.println("            ╠═══════╬═══════════════╬═════════════════════╬════════════════╬════════════════╬═══════════════╬════════════════╬═════════════════════════════════════╬═══════════════════════════════╣");
         System.out.printf(users.get(0).userView()).println();
         System.out.println("            ╚═══════╩═══════════════╩═════════════════════╩════════════════╩════════════════╩═══════════════╩════════════════╩═════════════════════════════════════╩═══════════════════════════════╝");
+    }
+    public void noChange() {
+        System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: exit ⦿ ");
     }
 
 //    public static void main(String[] args) throws IOException {
