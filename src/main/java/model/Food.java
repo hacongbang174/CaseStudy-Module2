@@ -103,6 +103,6 @@ public class Food implements IModel<Food> {
     }
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s", this.idFood, this.nameFood, this.quantity, this.priceFood, this.eTypeOfFood.getName());
+        return String.format("%s,%s,%s,%s,%s", this.idFood, this.nameFood, this.quantity, CurrencyFormat.parseInteger(this.priceFood), this.eTypeOfFood.getName());
     }
 }

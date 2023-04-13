@@ -158,7 +158,7 @@ public class AdminView {
     public boolean checkActionContinue() {
         boolean checkActionContinue = false;
         do {
-            System.out.println("Continue? Y/N");
+            System.out.println("Continue? Y/N! Y - menu hiện tại, N - menu chính!");
             String choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "Y":

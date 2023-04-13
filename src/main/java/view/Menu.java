@@ -30,8 +30,8 @@ public class Menu {
     }
 
     public void login() {
+        menuLogin();
         do {
-            menuLogin();
             try {
                 int select;
                 Scanner scanner = new Scanner(System.in);

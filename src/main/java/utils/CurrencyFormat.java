@@ -15,12 +15,18 @@ public class CurrencyFormat {
         String priceNew = price.replaceAll("\\D+", "");
         return Double.parseDouble(priceNew);
     }
-
+    public static int parseInteger(double price) {
+        String price1 = String.valueOf(price);
+        String priceNew = price1.replaceAll("\\D+\\d", "");
+        return Integer.parseInt(priceNew);
+    }
 //    public static void main(String[] args) {
 //        double price = 10000;
 //        String price1 = CurrencyFormat.covertPriceToString(price);
 //        System.out.println(price1);
 //        double price2 = CurrencyFormat.parseDouble(price1);
 //        System.out.println(price2);
+//        int p = parseInteger(price);
+//        System.out.println(p);
 //    }
 }
