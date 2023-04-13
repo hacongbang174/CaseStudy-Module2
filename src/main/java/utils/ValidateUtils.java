@@ -9,6 +9,7 @@ public class ValidateUtils {
     public static final String USERNAME_REGEX = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$";
     public static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\\\S+$).{8,}$";
     public static final  String DAY_REGEX = "^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)$"; //01-01-2023
+    public static final  String BIRTHDAY_REGEX = "^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)$"; //01/01/2023
     public static final String MONTH_REGEX = "^(0?[1-9]|1[012])-((19|20)\\d\\d)$"; // 04-2023
 
     public static boolean isPhoneNumber(String number) {
@@ -25,6 +26,9 @@ public class ValidateUtils {
     }
     public static boolean isDay(String date) {
         return  Pattern.matches(DAY_REGEX,date);
+    }
+    public static boolean isBirthDay(String date) {
+        return Pattern.matches(BIRTHDAY_REGEX,date);
     }
     public static boolean isMonth(String month) {
         return Pattern.matches(MONTH_REGEX,month);

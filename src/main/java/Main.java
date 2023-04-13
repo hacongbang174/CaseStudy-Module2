@@ -12,5 +12,6 @@ public class Main {
 //        foodInfo.foodInfo();
         Menu menu = new Menu();
         menu.login();
+
     }
 }

@@ -8,12 +8,12 @@ import java.util.Scanner;
 public class AdminView {
     private static final String FILE_ODER = "./src/main/data/oder.csv";
     private FoodView foodView;
-    private OderView oderView;
+    private OrderView orderView;
     private FileService fileService;
     private Scanner scanner;
     public AdminView() {
         foodView = new FoodView();
-        oderView = new OderView();
+        orderView = new OrderView();
         fileService = new FileService();
         scanner = new Scanner(System.in);
     }
@@ -64,19 +64,22 @@ public class AdminView {
             }
             checkAction = checkActionContinue();
         }while (!checkAction);
+        if(checkAction) {
+            launcher();
+        }
     }
     public  void menuOderManager(){
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                              Giao diện quản lý đơn hàng                           ║");
-        System.out.println("                               ║                       [1] Xem danh sách đơn hàng                                  ║");
-        System.out.println("                               ║                       [2] Tìm kiếm đơn hàng theo ID                               ║");
-        System.out.println("                               ║                       [3] Thêm đơn hàng vào danh sách đơn hàng                    ║");
-        System.out.println("                               ║                       [4] Xóa đơn hàng theo ID                                    ║");
+        System.out.println("                               ║                       [1] Xem danh sách tất cả đơn hàng                           ║");
+        System.out.println("                               ║                       [2] Xem danh sách đơn hàng chưa thanh toán                  ║");
+        System.out.println("                               ║                       [3] Xem danh sách đơn hàng đã thanh toán                    ║");
+        System.out.println("                               ║                       [4] Tìm kiếm đơn hàng theo ID                               ║");
         System.out.println("                               ║                       [5] Quay lại                                                ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
     public void launcherOder() throws IOException {
-        OderView oderView = new OderView();
+        OrderView orderView = new OrderView();
         int select = 0;
         boolean checkAction = false;
         do {
@@ -91,16 +94,16 @@ public class AdminView {
             }
             switch (select) {
                 case 1:
-                    oderView.showOderAll();
+                    orderView.showOderAll();
                     break;
                 case 2:
-                    oderView.findOderById();
+                    orderView.showOderUnPaid();
                     break;
                 case 3:
-                    oderView.addOderByAdmin();
+                    orderView.showOderPaid();
                     break;
                 case 4:
-                    oderView.deleteOderById();
+                    orderView.findOderById();
                     break;
                 case 5:
                     launcher();
@@ -111,6 +114,9 @@ public class AdminView {
             }
             checkAction = checkActionContinue();
         }while (!checkAction);
+        if(checkAction) {
+            launcher();
+        }
     }
     public  void menuRevenue(){
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
@@ -122,7 +128,7 @@ public class AdminView {
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
     public void launcherRevenue() throws IOException {
-        OderView oderView = new OderView();
+        OrderView orderView = new OrderView();
         int select = 0;
         boolean checkAction = false;
         do {
@@ -137,13 +143,13 @@ public class AdminView {
             }
             switch (select) {
                 case 1:
-                    oderView.showRevenueByDay();
+                    orderView.showRevenueByDay();
                     break;
                 case 2:
-                    oderView.showRevenueByMonth();
+                    orderView.showRevenueByMonth();
                     break;
                 case 3:
-                    oderView.showTotalRevenue();
+                    orderView.showTotalRevenue();
                     break;
                 case 4:
                     launcher();
@@ -154,11 +160,14 @@ public class AdminView {
             }
             checkAction = checkActionContinue();
         }while (!checkAction);
+        if(checkAction) {
+            launcher();
+        }
     }
     public boolean checkActionContinue() {
         boolean checkActionContinue = false;
         do {
-            System.out.println("Continue? Y/N! Y - menu hiện tại, N - menu chính!");
+            System.out.println("Nhập Y để quay về giao diện trước đó, nhập N để quay về giao diện AdminView!");
             String choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "Y":
@@ -171,7 +180,6 @@ public class AdminView {
         } while (!checkActionContinue);
         return true;
     }
-
 //    public static void main(String[] args) throws IOException {
 //        AdminView adminView = new AdminView();
 //        adminView.launcher();

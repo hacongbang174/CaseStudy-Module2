@@ -10,14 +10,14 @@ public class CustomerView {
     private static final String FILE_PATH_ODER = "./src/main/data/oder.csv";
     private final String FILE_PATH_USERUSE = "./src/main/data/userUse.csv";
     private UserService userService;
-    private OderView oderView;
+    private OrderView orderView;
     private FoodView foodView;
     private Scanner scanner;
     private FileService fileService;
     private LoginView loginView;
 
     public CustomerView() {
-        oderView = new OderView();
+        orderView = new OrderView();
         foodView = new FoodView();
         fileService = new FileService();
         scanner = new Scanner(System.in);
@@ -63,19 +63,19 @@ public class CustomerView {
                     foodView.searchFoodByKeyword();
                     break;
                 case 4:
-                    oderView.addFoodInOderByIdCustomer();
+                    orderView.addFoodInOderByIdCustomer();
                     break;
                 case 5:
-                    oderView.editQuantityFoodInOderByIdOder();
+                    orderView.editQuantityFoodInOderByIdOder();
                     break;
                 case 6:
-                    oderView.deleteFoodOutOderByIdOder();
+                    orderView.deleteFoodOutOderByIdOder();
                     break;
                 case 7:
-                    oderView.showOder();
+                    orderView.showOderNow();
                     break;
                 case 8:
-                    oderView.payOder();
+                    orderView.payOder();
                     break;
                 case 9:
                     launcherAccount();
@@ -92,6 +92,9 @@ public class CustomerView {
             }
             checkAction = checkActionContinue();
         }while (checkAction);
+        if(checkAction) {
+            launcher();
+        }
     }
 
     private void menuAccountManager() {
@@ -144,11 +147,14 @@ public class CustomerView {
             }
             checkAction = checkActionContinue();
         }while (checkAction);
+        if(checkAction) {
+            launcher();
+        }
     }
     public boolean checkActionContinue() {
         boolean checkActionContinue = false;
         do {
-            System.out.println("Continue? Y/N! Y - menu hiện tại, N - menu chính!");
+            System.out.println("Nhập Y để quay về giao diện trước đó, nhập N để quay về giao diện CustomerView!");
             String choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "Y":
@@ -160,5 +166,10 @@ public class CustomerView {
             }
         } while (checkActionContinue);
         return false;
+    }
+
+    public static void main(String[] args) throws IOException {
+        CustomerView customerView = new CustomerView();
+        customerView.launcher();
     }
 }

@@ -37,6 +37,9 @@ public class FoodService {
     public void deleteFoodById(int id) throws IOException {
         foodRepository.deleteById(id);
     }
+    public void ddeleteFoodUpdateById(int id) throws IOException {
+        foodUpdateRepository.deleteById(id);
+    }
     public void addFood(Food food) throws IOException {
         foodRepository.add(food);
     }

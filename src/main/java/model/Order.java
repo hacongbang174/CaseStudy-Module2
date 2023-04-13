@@ -6,8 +6,9 @@ import utils.DateFormat;
 
 import java.util.Date;
 
-public class Oder implements IModel<Oder> {
+public class Order implements IModel<Order> {
     private int idOder;
+    private int idCustomer;
     private String nameCustomer;
     private String nameFood;
     private int quantityFood;
@@ -16,11 +17,12 @@ public class Oder implements IModel<Oder> {
     private Date createDateOder;
     private EStatus status;
 
-    public Oder() {
+    public Order() {
     }
 
-    public Oder(int idOder, String nameCustomer, String nameFood, int quantityFood, double priceFood, double totalMoney, Date createDateOder, EStatus status) {
+    public Order(int idOder, int idCustomer, String nameCustomer, String nameFood, int quantityFood, double priceFood, double totalMoney, Date createDateOder, EStatus status) {
         this.idOder = idOder;
+        this.idCustomer = idCustomer;
         this.nameCustomer = nameCustomer;
         this.nameFood = nameFood;
         this.quantityFood = quantityFood;
@@ -36,6 +38,14 @@ public class Oder implements IModel<Oder> {
 
     public void setIdOder(int idOder) {
         this.idOder = idOder;
+    }
+
+    public int getIdCustomer() {
+        return idCustomer;
+    }
+
+    public void setIdCustomer(int idCustomer) {
+        this.idCustomer = idCustomer;
     }
 
     public String getNameCustomer() {
@@ -105,8 +115,9 @@ public class Oder implements IModel<Oder> {
     }
 
     @Override
-    public void update(Oder obj) {
+    public void update(Order obj) {
         this.idOder = obj.idOder;
+        this.idCustomer = obj.idCustomer;
         this.nameCustomer = obj.nameCustomer;
         this.nameFood = obj.nameFood;
         this.quantityFood = obj.quantityFood;
@@ -117,32 +128,34 @@ public class Oder implements IModel<Oder> {
     }
 
     @Override
-    public Oder parseData(String line) {
-        Oder oder = new Oder();
+    public Order parseData(String line) {
+        Order order = new Order();
         String[] strings = line.split(",");
         int idOder = Integer.parseInt(strings[0]);
-        String nameCustomer = strings[1];
-        String nameFood = strings[2];
-        int quantityFood = Integer.parseInt(strings[3]);
-        double priceFood = Double.parseDouble(strings[4]);
-        double totalMoney = Double.parseDouble(strings[5]);
-        Date createDateOder = DateFormat.parseDate2(strings[6]);
-        EStatus eStatus = EStatus.getStatusByName(strings[7]);
-        oder.setIdOder(idOder);
-        oder.setNameCustomer(nameCustomer);
-        oder.setNameFood(nameFood);
-        oder.setQuantityFood(quantityFood);
-        oder.setPriceFood(priceFood);
-        oder.setTotalMoney(totalMoney);
-        oder.setCreateDateOder(createDateOder);
-        oder.setStatus(eStatus);
-        return oder;
+        int idCustomer = Integer.parseInt(strings[1]);
+        String nameCustomer = strings[2];
+        String nameFood = strings[3];
+        int quantityFood = Integer.parseInt(strings[4]);
+        double priceFood = Double.parseDouble(strings[5]);
+        double totalMoney = Double.parseDouble(strings[6]);
+        Date createDateOder = DateFormat.parseDate2(strings[7]);
+        EStatus eStatus = EStatus.getStatusByName(strings[8]);
+        order.setIdOder(idOder);
+        order.setIdCustomer(idCustomer);
+        order.setNameCustomer(nameCustomer);
+        order.setNameFood(nameFood);
+        order.setQuantityFood(quantityFood);
+        order.setPriceFood(priceFood);
+        order.setTotalMoney(totalMoney);
+        order.setCreateDateOder(createDateOder);
+        order.setStatus(eStatus);
+        return order;
     }
     public String oderView() {
-        return String.format("            ║%7s║%-30s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", this.idOder, this.nameCustomer, this.nameFood, this.quantityFood, CurrencyFormat.covertPriceToString(this.priceFood), CurrencyFormat.covertPriceToString(this.totalMoney), DateFormat.convertDateToString2(this.createDateOder), this.status.getName());
+        return String.format("            ║ %-6s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", this.idOder, this.idCustomer, this.nameCustomer, this.nameFood, this.quantityFood, CurrencyFormat.covertPriceToString(this.priceFood), CurrencyFormat.covertPriceToString(this.totalMoney), DateFormat.convertDateToString2(this.createDateOder), this.status.getName());
     }
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", this.idOder, this.nameCustomer, this.nameFood, this.quantityFood, CurrencyFormat.parseInteger(this.priceFood), CurrencyFormat.parseInteger(this.totalMoney), DateFormat.convertDateToString2(this.createDateOder), this.status.getName());
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", this.idOder, this.idCustomer, this.nameCustomer, this.nameFood, this.quantityFood, CurrencyFormat.parseInteger(this.priceFood), CurrencyFormat.parseInteger(this.totalMoney), DateFormat.convertDateToString2(this.createDateOder), this.status.getName());
     }
 }

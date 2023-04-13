@@ -1,65 +1,65 @@
 package service;
 
-import model.Oder;
+import model.Order;
 import repository.ISearch;
-import repository.OderAllRepository;
-import repository.OderRepository;
+import repository.OrderAllRepository;
+import repository.OrderRepository;
 
 import java.io.IOException;
 import java.util.List;
 
 public class OderService {
-    private OderRepository oderRepository;
-    private OderAllRepository oderAllRepository;
+    private OrderRepository orderRepository;
+    private OrderAllRepository orderAllRepository;
     public OderService() {
-        oderRepository = new OderRepository();
-        oderAllRepository = new OderAllRepository();
+        orderRepository = new OrderRepository();
+        orderAllRepository = new OrderAllRepository();
     }
-    public List<Oder> getAllOder() throws IOException {
-        return oderRepository.getAll();
+    public List<Order> getAllOder() throws IOException {
+        return orderRepository.getAll();
     }
-    public Oder findFoodById(int id) throws IOException {
-        return oderRepository.findById(id);
+    public Order findFoodById(int id) throws IOException {
+        return orderRepository.findById(id);
     }
     public int checkIdOderAll(int id) throws IOException {
-        return oderAllRepository.checkID(id);
+        return orderAllRepository.checkID(id);
     }
     public int checkIdOder(int id) throws IOException {
-        return oderRepository.checkID(id);
+        return orderRepository.checkID(id);
     }
     public int checkNameFood(String name) throws IOException {
-        return oderRepository.checkName(name);
+        return orderRepository.checkName(name);
     }
     public void deleteFoodOutOderAllById(int id) throws IOException {
-        oderAllRepository.deleteById(id);
+        orderAllRepository.deleteById(id);
     }
     public void deleteFoodOutOderByName(String name) throws IOException {
-        oderRepository.deleteByName(name);
+        orderRepository.deleteByName(name);
     }
     public void deleteFoodOutOderAllByName(String name) throws IOException {
-        oderAllRepository.deleteByName(name);
+        orderAllRepository.deleteByName(name);
     }
-    public void addOder(Oder oder) throws IOException {
-        oderRepository.add(oder);
+    public void addOder(Order order) throws IOException {
+        orderRepository.add(order);
     }
-    public void updateFoodById(int id, Oder oder) throws IOException {
-        oderRepository.updateById(id,oder);
+    public void updateFoodById(int id, Order order) throws IOException {
+        orderRepository.updateById(id, order);
     }
-    public List<Oder> searchOderByName(String name, ISearch<Oder> iSearch) throws IOException {
-        return oderRepository.searchByName(name,iSearch);
+    public List<Order> searchOderByName(String name, ISearch<Order> iSearch) throws IOException {
+        return orderRepository.searchByName(name,iSearch);
     }
-    public void addOderList(List<Oder> list) throws IOException {
-        oderRepository.addList(list);
+    public void addOderList(List<Order> list) throws IOException {
+        orderRepository.addList(list);
     }
 
-    public List<Oder> getAllOderAll() throws IOException {
-        return oderAllRepository.getAll();
+    public List<Order> getAllOderAll() throws IOException {
+        return orderAllRepository.getAll();
     }
 
     public int checkNameFoodInOder(String nameFood) throws IOException {
-        return oderRepository.checkName(nameFood);
+        return orderRepository.checkName(nameFood);
     }
     public int checkNameFoodInOderAll(String nameFood) throws IOException {
-        return oderAllRepository.checkName(nameFood);
+        return orderAllRepository.checkName(nameFood);
     }
 }

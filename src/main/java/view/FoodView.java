@@ -94,6 +94,33 @@ public class FoodView {
             adminView.launcher();
         }
     }
+    public boolean checkActionContinue() {
+        boolean checkActionContinue = false;
+        do {
+            System.out.println("Nhập Y để quay về giao diện trước đó, nhập N để quay về giao diện AdminView!");
+            String choice = scanner.nextLine().trim().toUpperCase();
+            switch (choice) {
+                case "Y":
+                    return false;
+                case "N":
+                    return true;
+                default:
+                    checkActionContinue = false;
+            }
+        } while (!checkActionContinue);
+        return true;
+    }
+    public void menuEditFoodView() {
+        System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("                               ║                               Chọn mục bạn muốn sửa                               ║");
+        System.out.println("                               ║                        1. Chỉnh sửa tên đồ uống, thức ăn                          ║");
+        System.out.println("                               ║                        2. Chỉnh sửa số lượng đồ uống, thức ăn                     ║");
+        System.out.println("                               ║                        3. Chỉnh sửa giá đồ uống, thức ăn                          ║");
+        System.out.println("                               ║                        4. Chỉnh sửa loại uống, thức ăn                            ║");
+        System.out.println("                               ║                        5. Quay lại                                                ║");
+        System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
+    }
+
 
     public void sortByIdDecrease() throws IOException {
         List<Food> foods = foodService.getAllFood();
@@ -151,20 +178,10 @@ public class FoodView {
         } while (!checkAction);
     }
 
-    public void menuEditFoodView() {
-        System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
-        System.out.println("                               ║                               Chọn mục bạn muốn sửa                               ║");
-        System.out.println("                               ║                        1. Chỉnh sửa tên đồ uống, thức ăn                          ║");
-        System.out.println("                               ║                        2. Chỉnh sửa số lượng đồ uống, thức ăn                     ║");
-        System.out.println("                               ║                        3. Chỉnh sửa giá đồ uống, thức ăn                          ║");
-        System.out.println("                               ║                        4. Chỉnh sửa loại uống, thức ăn                            ║");
-        System.out.println("                               ║                        5. Quay lại                                                ║");
-        System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
-    }
-
     public void deleteFoodById() throws IOException {
         showFoodList();
         List<Food> foods = foodService.getAllFood();
+        List<Food> foodsUpdate = foodService.getAllFoodUpdate();
         noChange();
         int id = 0;
         boolean checkID = false;
@@ -185,6 +202,8 @@ public class FoodView {
             int check = foodService.checkIdFood(id);
             switch (check) {
                 case 1:
+                    foodService.deleteFoodById(id);
+                    foodService.ddeleteFoodUpdateById(id);
                     checkID = true;
                     break;
                 case -1:
@@ -193,8 +212,10 @@ public class FoodView {
                     break;
             }
         } while (!checkID);
-        foodService.deleteFoodById(id);
-        fileService.writeData(FILE_PATH_FOOD, foods);
+//
+//        fileService.writeData(FILE_PATH_FOOD, foods);
+//        fileService.writeData(FILE_PATH_FOOD_UPDATE,foodsUpdate);
+        showFoodList();
         System.out.println("✔ Bạn đã xóa món thành công ✔\n");
     }
 
@@ -542,22 +563,6 @@ public class FoodView {
         }
         System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
     }
-    public boolean checkActionContinue() {
-        boolean checkActionContinue = false;
-        do {
-            System.out.println("Continue? Y/N");
-            String choice = scanner.nextLine().trim().toUpperCase();
-            switch (choice) {
-                case "Y":
-                    return false;
-                case "N":
-                    return true;
-                default:
-                    checkActionContinue = false;
-            }
-        } while (!checkActionContinue);
-        return true;
-    }
 
     public void inputFoodPrice(Food food) {
         double price = 0;
@@ -640,6 +645,6 @@ public class FoodView {
 //        foodView.addFood();
 //        foodView.editFoodById();
 //        foodView.findFoodById();
-        foodView.searchFoodByKeyword();
+        foodView.launcher();
     }
 }

@@ -155,10 +155,13 @@ public class LoginView {
             gender = scanner.nextLine();
             switch (gender) {
                 case "male":
+                    checkGender = true;
                     break;
                 case "female":
+                    checkGender = true;
                     break;
                 case "other":
+                    checkGender = true;
                     break;
                 case "exit":
                     checkGender = true;
@@ -171,11 +174,19 @@ public class LoginView {
         } while (!checkGender);
 
         inputCCCD(user);
-        System.out.println("Nhập ngày tháng năm sinh: dd/MM/yyyy");
-        String date = scanner.nextLine();
-        if (date.equals("exit")) {
-            menu.login();
-        }
+        boolean checkBirthDay = false;
+        String date = null;
+        do {
+            System.out.println("Nhập ngày tháng năm sinh: dd/MM/yyyy");
+            date = scanner.nextLine();
+            if (date.equals("exit")) {
+                menu.login();
+            }
+            checkBirthDay = ValidateUtils.isBirthDay(date);
+            if(!checkBirthDay) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+            }
+        }while (!checkBirthDay);
         inputEmail(user);
         System.out.println("Nhập địa chỉ của bạn:");
         String address = scanner.nextLine();
@@ -229,7 +240,7 @@ public class LoginView {
         boolean checkCCCD = false;
         do {
             do {
-                System.out.println("Nhập số CCCD của bạn:");
+                System.out.println("Nhập số CCCD của bạn: Bắt đầu bằng 0 và có 12 số!");
                 cccd = scanner.nextLine();
                 if(cccd.equals("exit")) {
                     checkCCCD = true;
@@ -456,7 +467,9 @@ public class LoginView {
         System.out.println("            ╔═══════╦═══════════════╦═════════════════════╦════════════════╦════════════════╦═══════════════╦════════════════╦═════════════════════════════════════╦═══════════════════════════════╗");
         System.out.printf("            ║%7s║%-15s║ %-20s║ %-15s║ %-15s║%-15s║ %-15s║ %-36s║ %-30s║", "ID", "USERNAME", "FULLNAME", "PHONE NUMBER", "GENDER", "CCCD", "BIRTHDAY", "EMAIL", "ADDRESS").println();
         System.out.println("            ╠═══════╬═══════════════╬═════════════════════╬════════════════╬════════════════╬═══════════════╬════════════════╬═════════════════════════════════════╬═══════════════════════════════╣");
-        System.out.printf(users.get(0).userView()).println();
+        for (User user : users){
+            System.out.printf(user.userView()).println();
+        }
         System.out.println("            ╚═══════╩═══════════════╩═════════════════════╩════════════════╩════════════════╩═══════════════╩════════════════╩═════════════════════════════════════╩═══════════════════════════════╝");
     }
     public void noChange() {

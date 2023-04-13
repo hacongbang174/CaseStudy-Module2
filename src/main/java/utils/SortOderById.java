@@ -1,12 +1,12 @@
 package utils;
 
-import model.Oder;
+import model.Order;
 
 import java.util.Comparator;
 
-public class SortOderById implements Comparator<Oder> {
+public class SortOderById implements Comparator<Order> {
     @Override
-    public int compare(Oder o1, Oder o2) {
+    public int compare(Order o1, Order o2) {
         return o1.getIdOder() - o2.getIdOder();
     }
 }
