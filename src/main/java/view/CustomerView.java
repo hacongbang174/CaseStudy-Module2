@@ -108,10 +108,17 @@ public class CustomerView {
     public void launcherAccount() throws IOException {
         CustomerView customerView = new CustomerView();
         boolean checkAction = false;
+        int select;
         do {
             menuAccountManager();
             System.out.println("Chọn chức năng:");
-            int select = Integer.parseInt(scanner.nextLine());
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
             switch (select) {
                 case 1:
                     loginView.showInfoAccount();
@@ -132,7 +139,7 @@ public class CustomerView {
                     customerView.launcher();
                     break;
                 default:
-                    customerView.launcherAccount();
+                    System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
                     break;
             }
             checkAction = checkActionContinue();
