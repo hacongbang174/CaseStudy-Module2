@@ -63,7 +63,7 @@ public class Menu {
         } while (true);
     }
 
-    private void signUp() throws IOException {
+    public void signUp() throws IOException {
         loginView.signUp();
     }
 
@@ -71,7 +71,7 @@ public class Menu {
         loginView.loginAdmin();
 
     }
-    private void customer() throws IOException {
+    public void customer() throws IOException {
         loginView.loginCustomer();
     }
 

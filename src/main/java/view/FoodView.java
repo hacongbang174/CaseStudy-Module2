@@ -95,7 +95,7 @@ public class FoodView {
         }
     }
 
-    private void sortByIdDecrease() throws IOException {
+    public void sortByIdDecrease() throws IOException {
         List<Food> foods = foodService.getAllFood();
         foods.sort(new SortFoodByIdDecrease());
         fileService.writeData(FILE_PATH_FOOD, foods);
@@ -103,7 +103,7 @@ public class FoodView {
         System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
-    private void sortByIdIncrease() throws IOException {
+    public void sortByIdIncrease() throws IOException {
         List<Food> foods = foodService.getAllFood();
         foods.sort(new SortFoodByIDIncrease());
         fileService.writeData(FILE_PATH_FOOD, foods);
@@ -111,7 +111,7 @@ public class FoodView {
         System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
-    private void findFoodById() throws IOException {
+    public void findFoodById() throws IOException {
         List<Food> foods = foodService.getAllFood();
         boolean checkAction = false;
         noChange();
@@ -505,7 +505,7 @@ public class FoodView {
         System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
     }
 
-    private void showFoodListByType() throws IOException {
+    public void showFoodListByType() throws IOException {
         List<Food> foods = foodService.getAllFood();
         noChange();
         String typeOfFood;
@@ -600,17 +600,33 @@ public class FoodView {
         food.setQuantity(quantity);
     }
 
-    public void searchFoodByString() throws IOException {
-        System.out.println("Nhập tên bạn muốn tìm kiếm: ");
-        String kw = scanner.nextLine();
+    public void searchFoodByKeyword() throws IOException {
+        CustomerView customerView = new CustomerView();
         List<Food> results = new ArrayList<>();
-
         List<Food> foods = foodService.getAllFood();
-        for (int i = 0; i < foods.size(); i++) {
-            if (foods.get(i).getNameFood().contains(kw)) {
-                results.add(foods.get(i));
+        noChange();
+        boolean checkKW = false;
+        do {
+            System.out.println("Nhập tên bạn muốn tìm kiếm: ");
+            String kw = scanner.nextLine();
+            if(kw.equals("exit")) {
+                checkKW = true;
+                customerView.launcher();
             }
-        }
+            boolean checkOut = false;
+            for (int i = 0; i < foods.size(); i++) {
+                if (foods.get(i).getNameFood().toUpperCase().contains(kw.toUpperCase())) {
+                    results.add(foods.get(i));
+                    checkOut = true;
+                }
+            }
+            if(!checkOut) {
+                System.out.println("Không tìm thấy món, vui lòng nhập lại!");
+                checkKW = false;
+            }else {
+                checkKW = true;
+            }
+        }while (!checkKW);
         showFoodList(results);
     }
 
@@ -624,6 +640,6 @@ public class FoodView {
 //        foodView.addFood();
 //        foodView.editFoodById();
 //        foodView.findFoodById();
-        foodView.launcher();
+        foodView.searchFoodByKeyword();
     }
 }

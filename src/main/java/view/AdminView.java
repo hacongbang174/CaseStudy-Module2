@@ -23,7 +23,7 @@ public class AdminView {
         System.out.println("                               ║                                 [1] Quản lý đồ uống, thức ăn                      ║");
         System.out.println("                               ║                                 [2] Quản lý đơn hàng                              ║");
         System.out.println("                               ║                                 [3] Xem danh sách khách hàng                      ║");
-        System.out.println("                               ║                                 [4] Tổng doanh thu                                ║");
+        System.out.println("                               ║                                 [4] Xem doanh thu                                 ║");
         System.out.println("                               ║                                 [5] Đăng xuất                                     ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
@@ -52,7 +52,7 @@ public class AdminView {
                     loginView.showInfoCustomer();
                     break;
                 case 4:
-                    oderView.showTotalRevenue();
+                    launcherRevenue();
                     break;
                 case 5:
                     Menu menu = new Menu();
@@ -97,12 +97,55 @@ public class AdminView {
                     oderView.findOderById();
                     break;
                 case 3:
-                    oderView.addOder();
+                    oderView.addOderByAdmin();
                     break;
                 case 4:
                     oderView.deleteOderById();
                     break;
                 case 5:
+                    launcher();
+                    break;
+                default:
+                    System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    break;
+            }
+            checkAction = checkActionContinue();
+        }while (!checkAction);
+    }
+    public  void menuRevenue(){
+        System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("                               ║                              Doanh thu Phúc Long coffe                            ║");
+        System.out.println("                               ║                       [1] Xem doanh thu theo ngày                                 ║");
+        System.out.println("                               ║                       [2] Xem doanh thu theo tháng                                ║");
+        System.out.println("                               ║                       [3] Xem tổng doanh thu toàn bộ                              ║");
+        System.out.println("                               ║                       [4] Quay lại                                                ║");
+        System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
+    }
+    public void launcherRevenue() throws IOException {
+        OderView oderView = new OderView();
+        int select = 0;
+        boolean checkAction = false;
+        do {
+            menuRevenue();
+            System.out.println("Chọn chức năng:");
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
+            switch (select) {
+                case 1:
+                    oderView.showRevenueByDay();
+                    break;
+                case 2:
+                    oderView.showRevenueByMonth();
+                    break;
+                case 3:
+                    oderView.showTotalRevenue();
+                    break;
+                case 4:
                     launcher();
                     break;
                 default:
@@ -131,6 +174,6 @@ public class AdminView {
 
 //    public static void main(String[] args) throws IOException {
 //        AdminView adminView = new AdminView();
-//        adminView.launcherOder();
+//        adminView.launcher();
 //    }
 }

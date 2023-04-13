@@ -7,7 +7,9 @@ public class ValidateUtils {
     public static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
     public static final String CCCD_REGEX = "^0\\d{11}$";
     public static final String USERNAME_REGEX = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$";
-    public static final String PASSWORD_REGGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\\\S+$).{8,}$";
+    public static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\\\S+$).{8,}$";
+    public static final  String DAY_REGEX = "^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)$"; //01-01-2023
+    public static final String MONTH_REGEX = "^(0?[1-9]|1[012])-((19|20)\\d\\d)$"; // 04-2023
 
     public static boolean isPhoneNumber(String number) {
         return Pattern.matches(PHONENUMBER_REGEX, number);
@@ -20,6 +22,12 @@ public class ValidateUtils {
     }
     public static boolean isUserName(String username){
         return Pattern.matches(USERNAME_REGEX,username);
+    }
+    public static boolean isDay(String date) {
+        return  Pattern.matches(DAY_REGEX,date);
+    }
+    public static boolean isMonth(String month) {
+        return Pattern.matches(MONTH_REGEX,month);
     }
     public static boolean isPassWord(String password) {
         return Pattern.matches(PHONENUMBER_REGEX, password);

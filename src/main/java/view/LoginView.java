@@ -65,11 +65,13 @@ public class LoginView {
             checkInfoLogin = userService.checkLoginAdmin(username, password);
             if (!checkInfoLogin) {
                 System.out.println("Incorrect username or incorrect password. Please re-enter");
-            } else {
+                loginAdmin();
+            }else  {
                 AdminView adminView = new AdminView();
                 adminView.launcher();
             }
         } while (checkInfoLogin);
+
     }
 
     public void loginCustomer() throws IOException {
@@ -83,6 +85,7 @@ public class LoginView {
             checkInfoLogin = userService.checkLoginCustomer(username, password);
             if (!checkInfoLogin) {
                 System.out.println("Incorrect username or incorrect password. Please re-enter");
+                loginCustomer();
             } else {
                 List<User> userList = new ArrayList<>();
                 User user = userService.loginCustomer(username, password);
@@ -148,7 +151,7 @@ public class LoginView {
     }
 
 
-    private void inputEmail(User user) throws IOException {
+    public void inputEmail(User user) throws IOException {
         String email;
         boolean checkValid = false;
         boolean checkEmail = true;
@@ -169,7 +172,7 @@ public class LoginView {
         user.setEmail(email);
     }
 
-    private void inputCCCD(User user) throws IOException {
+    public void inputCCCD(User user) throws IOException {
         String cccd;
         boolean checkValid = false;
         boolean checkCCCD = true;
@@ -190,7 +193,7 @@ public class LoginView {
         user.setCccd(cccd);
     }
 
-    private void inputPhoneNumber(User user) throws IOException {
+    public void inputPhoneNumber(User user) throws IOException {
         String phoneNumber = null;
         boolean checkValid = false;
         boolean checkPhoneNumber = true;

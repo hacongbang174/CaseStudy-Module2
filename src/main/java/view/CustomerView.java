@@ -1,7 +1,6 @@
 package view;
 
 import service.FileService;
-import service.OderService;
 import service.UserService;
 
 import java.io.IOException;
@@ -29,56 +28,66 @@ public class CustomerView {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                                    Giao diện Customer                             ║");
         System.out.println("                               ║                   [1] Xem danh sách đồ uống, thức ăn                              ║");
-        System.out.println("                               ║                   [2] Tìm kiếm đồ uống, thức ăn theo chuỗi tìm kiếm               ║");
-        System.out.println("                               ║                   [3] Thêm món vào oder theo id đồ uống, thức ăn                  ║");
-        System.out.println("                               ║                   [4] Chỉnh sửa số lượng món đã oder theo id đồ uống, thức ăn     ║");
-        System.out.println("                               ║                   [5] Xóa món khỏi oder theo id đồ uống, thức ăn                  ║");
-        System.out.println("                               ║                   [6] Xem lịch sử oder món                                        ║");
-        System.out.println("                               ║                   [7] Thanh toán                                                  ║");
-        System.out.println("                               ║                   [8] Quản lý tài khoản                                           ║");
-        System.out.println("                               ║                   [9] Đăng xuất                                                   ║");
+        System.out.println("                               ║                   [2] Xem danh sách đồ uống, thức ăn theo danh mục                ║");
+        System.out.println("                               ║                   [3] Tìm kiếm đồ uống, thức ăn theo keyword                      ║");
+        System.out.println("                               ║                   [4] Thêm món vào oder theo id đồ uống, thức ăn                  ║");
+        System.out.println("                               ║                   [5] Chỉnh sửa số lượng món đã oder theo id oder                 ║");
+        System.out.println("                               ║                   [6] Xóa món khỏi oder theo id oder                              ║");
+        System.out.println("                               ║                   [7] Xem lịch sử oder món                                        ║");
+        System.out.println("                               ║                   [8] Thanh toán                                                  ║");
+        System.out.println("                               ║                   [9] Quản lý tài khoản                                           ║");
+        System.out.println("                               ║                   [10] Đăng xuất                                                  ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
     public void launcher() throws IOException {
+        int select = 0;
         boolean checkAction = false;
         do {
             menuCustomerView();
             System.out.println("Chọn chức năng:");
-            int select = Integer.parseInt(scanner.nextLine());
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
             switch (select) {
                 case 1:
                     foodView.showFoodList();
                     break;
                 case 2:
-                    foodView.searchFoodByString();
+                    foodView.showFoodListByType();
                     break;
                 case 3:
-                    oderView.addFoodInOder();
+                    foodView.searchFoodByKeyword();
                     break;
                 case 4:
-                    oderView.editQuantityFoodInOder();
+                    oderView.addFoodInOderByIdCustomer();
                     break;
                 case 5:
-                    oderView.deleteFoodOutOder();
+                    oderView.editQuantityFoodInOderByIdOder();
                     break;
                 case 6:
-                    oderView.showHistoryOder();
+                    oderView.deleteFoodOutOderByIdOder();
                     break;
                 case 7:
-                    oderView.payOder();
+                    oderView.showOder();
                     break;
                 case 8:
-                    launcherAccount();
+                    oderView.payOder();
                     break;
                 case 9:
+                    launcherAccount();
+                    break;
+                case 10:
                     fileService.clearData(FILE_PATH_USERUSE);
                     fileService.clearData(FILE_PATH_ODER);
                     Menu menu = new Menu();
                     menu.login();
                     break;
                 default:
-                    CustomerView customerView = new CustomerView();
-                    customerView.launcher();
+                    System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
                     break;
             }
             checkAction = checkActionContinue();
