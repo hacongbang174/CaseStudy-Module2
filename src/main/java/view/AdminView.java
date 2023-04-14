@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class AdminView {
-    private static final String FILE_ODER = "./src/main/data/oder.csv";
+    private static final String FILE_ODER = "./src/main/data/order.csv";
     private FoodView foodView;
     private OrderView orderView;
     private FileService fileService;

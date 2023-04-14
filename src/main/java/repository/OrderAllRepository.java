@@ -4,7 +4,7 @@ import model.Order;
 
 public class OrderAllRepository extends FileContext<Order> {
     public OrderAllRepository() {
-        filePath = "./src/main/data/oderAll.csv";
+        filePath = "./src/main/data/orderAll.csv";
         tClass = Order.class;
     }
 }

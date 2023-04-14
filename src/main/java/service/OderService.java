@@ -33,6 +33,9 @@ public class OderService {
     public void deleteFoodOutOderAllById(int id) throws IOException {
         orderAllRepository.deleteById(id);
     }
+    public void deleteFoodOutOderById(int id) throws IOException {
+        orderRepository.deleteById(id);
+    }
     public void deleteFoodOutOderByName(String name) throws IOException {
         orderRepository.deleteByName(name);
     }

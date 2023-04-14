@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class CustomerView {
-    private static final String FILE_PATH_ODER = "./src/main/data/oder.csv";
+    private static final String FILE_PATH_ODER = "./src/main/data/order.csv";
     private final String FILE_PATH_USERUSE = "./src/main/data/userUse.csv";
     private UserService userService;
     private OrderView orderView;
@@ -30,10 +30,10 @@ public class CustomerView {
         System.out.println("                               ║                   [1] Xem danh sách đồ uống, thức ăn                              ║");
         System.out.println("                               ║                   [2] Xem danh sách đồ uống, thức ăn theo danh mục                ║");
         System.out.println("                               ║                   [3] Tìm kiếm đồ uống, thức ăn theo keyword                      ║");
-        System.out.println("                               ║                   [4] Thêm món vào oder theo id đồ uống, thức ăn                  ║");
-        System.out.println("                               ║                   [5] Chỉnh sửa số lượng món đã oder theo id oder                 ║");
-        System.out.println("                               ║                   [6] Xóa món khỏi oder theo id oder                              ║");
-        System.out.println("                               ║                   [7] Xem lịch sử oder món                                        ║");
+        System.out.println("                               ║                   [4] Thêm món vào order theo id đồ uống, thức ăn                 ║");
+        System.out.println("                               ║                   [5] Chỉnh sửa số lượng món đã order theo id order               ║");
+        System.out.println("                               ║                   [6] Xóa món khỏi order theo id order                            ║");
+        System.out.println("                               ║                   [7] Xem lịch sử order món                                       ║");
         System.out.println("                               ║                   [8] Thanh toán                                                  ║");
         System.out.println("                               ║                   [9] Quản lý tài khoản                                           ║");
         System.out.println("                               ║                   [10] Đăng xuất                                                  ║");
@@ -72,7 +72,7 @@ public class CustomerView {
                     orderView.deleteFoodOutOderByIdOder();
                     break;
                 case 7:
-                    orderView.showOderNow();
+                    orderView.showHistoryOder();
                     break;
                 case 8:
                     orderView.payOder();
@@ -82,7 +82,6 @@ public class CustomerView {
                     break;
                 case 10:
                     fileService.clearData(FILE_PATH_USERUSE);
-                    fileService.clearData(FILE_PATH_ODER);
                     Menu menu = new Menu();
                     menu.login();
                     break;

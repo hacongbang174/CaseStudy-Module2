@@ -5,7 +5,8 @@ import model.Food;
 import service.FileService;
 import service.FoodService;
 import utils.SortFoodByIDIncrease;
-import utils.SortFoodByIdDecrease;
+import utils.SortFoodByPriceDecrease;
+import utils.SortFoodByPriceIncrease;
 import utils.ValidateUtils;
 
 import java.io.IOException;
@@ -35,8 +36,8 @@ public class FoodView {
         System.out.println("                               ║                        4. Chỉnh sửa đồ uống, thức ăn theo id                      ║");
         System.out.println("                               ║                        5. Tìm kiếm đồ uống, thức ăn theo id                       ║");
         System.out.println("                               ║                        6. Xóa đồ uống, thức ăn theo id                            ║");
-        System.out.println("                               ║                        7. Sắp xếp đồ uống, thức ăn theo id tăng dần               ║");
-        System.out.println("                               ║                        8. Sắp xếp đồ uống, thức ăn theo id giảm dần               ║");
+        System.out.println("                               ║                        7. Sắp xếp đồ uống, thức ăn theo giá tăng dần              ║");
+        System.out.println("                               ║                        8. Sắp xếp đồ uống, thức ăn theo giá giảm dần              ║");
         System.out.println("                               ║                        9. Quay lại                                                ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
@@ -74,10 +75,10 @@ public class FoodView {
                     deleteFoodById();
                     break;
                 case 7:
-                    sortByIdIncrease();
+                    sortByPriceIncrease();
                     break;
                 case 8:
-                    sortByIdDecrease();
+                    sortByPriceDecrease();
                     break;
                 case 9:
                     AdminView adminView = new AdminView();
@@ -122,9 +123,16 @@ public class FoodView {
     }
 
 
-    public void sortByIdDecrease() throws IOException {
+    public void sortByPriceDecrease() throws IOException {
         List<Food> foods = foodService.getAllFood();
-        foods.sort(new SortFoodByIdDecrease());
+        foods.sort(new SortFoodByPriceDecrease());
+        fileService.writeData(FILE_PATH_FOOD, foods);
+        showFoodList();
+        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
+    }
+    public void sortByPriceIncrease() throws IOException {
+        List<Food> foods = foodService.getAllFood();
+        foods.sort(new SortFoodByPriceIncrease());
         fileService.writeData(FILE_PATH_FOOD, foods);
         showFoodList();
         System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
