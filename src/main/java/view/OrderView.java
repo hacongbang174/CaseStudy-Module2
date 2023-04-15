@@ -620,13 +620,26 @@ public class OrderView {
     }
 
     public void showHistoryOder() throws IOException {
+        List<Order> orders = oderService.getAllOder();
+        List<User> users = userService.getAllUserUse();
+        System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
+        System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
+        System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+        for (int i = 0; i < orders.size(); i++) {
+            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
+                System.out.printf(orders.get(i).oderView()).println();
+            }
+        }
+        System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+    }
+    public void showHistoryOderPaid() throws IOException {
         List<Order> orderAll = oderService.getAllOderAll();
         List<User> users = userService.getAllUserUse();
         System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
         System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
         System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
         for (int i = 0; i < orderAll.size(); i++) {
-            if (orderAll.get(i).getIdCustomer() == users.get(0).getId()) {
+            if (orderAll.get(i).getIdCustomer() == users.get(0).getId() && orderAll.get(i).getStatus().equals(EStatus.PAID)) {
                 System.out.printf(orderAll.get(i).oderView()).println();
             }
         }
@@ -652,7 +665,7 @@ public class OrderView {
                 totalMoney += orders.get(i).getTotalMoney();
                 orders.get(i).setStatus(EStatus.PAID);
                 System.out.printf(orders.get(i).oderView()).println();
-                orders.remove(i);
+
             }
         }
         System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
@@ -663,11 +676,11 @@ public class OrderView {
                 orderAll.get(i).setStatus(EStatus.PAID);
             }
         }
-//        for (int i = 0; i < orders.size(); i++) {
-//            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
-//
-//            }
-//        }
+        for (int i = 0; i < orders.size(); i++) {
+            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
+                orders.remove(i);
+            }
+        }
         fileService.writeData(FILE_PATH_ORDER,orders);
         fileService.writeData(FILE_PATH_ODERALL, orderAll);
         System.out.println("✔ Bạn đã thanh toán thành công ✔\n");
@@ -860,5 +873,6 @@ public class OrderView {
     public void noChange() {
         System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: exit ⦿ ");
     }
+
 
 }

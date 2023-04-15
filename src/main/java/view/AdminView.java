@@ -44,29 +44,32 @@ public class AdminView {
             switch (select) {
                 case 1:
                     foodView.launcher();
+                    checkAction = checkActionContinue();
                     break;
                 case 2:
                     launcherOder();
+                    checkAction = checkActionContinue();
                     break;
                 case 3:
                     loginView.showInfoCustomer();
+                    checkAction = checkActionContinue();
                     break;
                 case 4:
                     launcherRevenue();
+                    checkAction = checkActionContinue();
                     break;
                 case 5:
                     Menu menu = new Menu();
                     menu.login();
+                    checkAction = checkActionContinue();
                     break;
                 default:
                     System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    checkAction = false;
                     break;
             }
-            checkAction = checkActionContinue();
         }while (!checkAction);
         if(checkAction) {
-            launcher();
-        }else {
             launcher();
         }
     }
@@ -97,28 +100,31 @@ public class AdminView {
             switch (select) {
                 case 1:
                     orderView.showOderAll();
+                    checkAction = checkActionContinue();
                     break;
                 case 2:
                     orderView.showOderUnPaid();
+                    checkAction = checkActionContinue();
                     break;
                 case 3:
                     orderView.showOderPaid();
+                    checkAction = checkActionContinue();
                     break;
                 case 4:
                     orderView.findOderById();
+                    checkAction = checkActionContinue();
                     break;
                 case 5:
                     launcher();
+                    checkAction = checkActionContinue();
                     break;
                 default:
                     System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    checkAction = false;
                     break;
             }
-            checkAction = checkActionContinue();
         }while (!checkAction);
         if(checkAction) {
-            launcherOder();
-        }else {
             launcher();
         }
     }
@@ -148,25 +154,27 @@ public class AdminView {
             switch (select) {
                 case 1:
                     orderView.showRevenueByDay();
+                    checkAction = checkActionContinue();
                     break;
                 case 2:
                     orderView.showRevenueByMonth();
+                    checkAction = checkActionContinue();
                     break;
                 case 3:
                     orderView.showTotalRevenue();
+                    checkAction = checkActionContinue();
                     break;
                 case 4:
                     launcher();
+                    checkAction = checkActionContinue();
                     break;
                 default:
                     System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    checkAction = false;
                     break;
             }
-            checkAction = checkActionContinue();
         }while (!checkAction);
         if(checkAction) {
-            launcherRevenue();
-        }else {
             launcher();
         }
     }

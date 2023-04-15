@@ -58,38 +58,47 @@ public class FoodView {
             switch (select) {
                 case 1:
                     showFoodList();
+                    checkAction = checkActionContinue();
                     break;
                 case 2:
                     showFoodListByType();
+                    checkAction = checkActionContinue();
                     break;
                 case 3:
                     sortByPriceIncrease();
+                    checkAction = checkActionContinue();
                     break;
                 case 4:
                     sortByPriceDecrease();
+                    checkAction = checkActionContinue();
                     break;
                 case 5:
                     addFood();
+                    checkAction = checkActionContinue();
                     break;
                 case 6:
                     editFoodById();
+                    checkAction = checkActionContinue();
                     break;
                 case 7:
                     findFoodById();
+                    checkAction = checkActionContinue();
                     break;
                 case 8:
                     deleteFoodById();
+                    checkAction = checkActionContinue();
                     break;
 
                 case 9:
                     AdminView adminView = new AdminView();
                     adminView.launcher();
+                    checkAction = checkActionContinue();
                     break;
                 default:
                     System.out.println("Nhập sai chức năng, mời nhập lại!");
+                    checkAction = false;
                     break;
             }
-            checkAction = checkActionContinue();
         } while (!checkAction);
         if(checkAction) {
             AdminView adminView = new AdminView();
@@ -99,7 +108,7 @@ public class FoodView {
     public boolean checkActionContinue() {
         boolean checkActionContinue = false;
         do {
-            System.out.println("Nhập Y để quay về giao diện trước đó, nhập N để quay về giao diện AdminView!");
+            System.out.println("Nhập \"Y\" để quay về giao diện trước đó, nhập \"N\" để quay về giao diện Admin!");
             String choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "Y":
@@ -221,6 +230,7 @@ public class FoodView {
     public void editFoodById() throws IOException {
         showFoodList();
         List<Food> foods = foodService.getAllFood();
+        List<Food> foodsUpdate = foodService.getAllFoodUpdate();
         FoodView foodView = new FoodView();
         noChange();
         int id = 0;
@@ -248,22 +258,44 @@ public class FoodView {
                             do {
                                 menuEditFoodView();
                                 System.out.println("Chọn mục bạn muốn sửa:");
-                                int select = Integer.parseInt(scanner.nextLine());
+                                int select = 0;
+                                try {
+                                    select = Integer.parseInt(scanner.nextLine());
+                                } catch (NumberFormatException numberFormatException) {
+                                    System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                                    select = 0;
+                                    continue;
+                                }
                                 switch (select) {
                                     case 1:
                                         noChange();
-                                        System.out.println("Nhập tên bạn muốn sửa:");
-                                        String name = scanner.nextLine();
-                                        if(name.equals("exit")) {
-                                            checkId = true;
-                                            launcher();
+                                        String nameFood = null;
+                                        boolean checkValidFullName = false;
+                                        boolean checkFullName = false;
+                                        do {
+                                            System.out.println("Nhập tên đồ uống, thức ăn:");
+                                            nameFood = scanner.nextLine();
+                                            if (nameFood.equals("exit")) {
+                                                checkId = true;
+                                                launcher();
+                                            }
+                                            checkValidFullName = ValidateUtils.isNameFood(nameFood);
+                                            if (!checkValidFullName) {
+                                                System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
+                                            }
+                                        } while (!checkValidFullName);
+                                        foods.get(i).setNameFood(nameFood);
+                                        for (int j = 0; j < foodsUpdate.size(); j++) {
+                                            if(foodsUpdate.get(j).getIdFood() == id) {
+                                                foodsUpdate.get(j).setNameFood(nameFood);
+                                            }
                                         }
-                                        foods.get(i).setNameFood(name);
+                                        checkAction = true;
                                         break;
                                     case 2:
                                         noChange();
                                         int quantity = 0;
-                                        boolean checkValid = false;
+                                        boolean checkValidQuantity = false;
                                         do {
                                             System.out.println("Nhập số lượng bạn muốn sửa:");
                                             String input1 = scanner.nextLine();
@@ -278,17 +310,23 @@ public class FoodView {
                                                 quantity = 0;
                                                 continue;
                                             }
-                                            checkValid = ValidateUtils.isQuantity(quantity);
-                                            if (checkValid == false) {
+                                            checkValidQuantity = ValidateUtils.isQuantity(quantity);
+                                            if (checkValidQuantity == false) {
                                                 System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
                                             }
-                                        } while (checkValid == false);
+                                        } while (checkValidQuantity == false);
                                         foods.get(i).setQuantity(quantity);
+                                        for (int j = 0; j < foodsUpdate.size(); j++) {
+                                            if(foodsUpdate.get(j).getIdFood() == id) {
+                                                foodsUpdate.get(j).setQuantity(quantity);
+                                            }
+                                        }
+                                        checkAction = true;
                                         break;
                                     case 3:
                                         noChange();
                                         double price = 0;
-                                        boolean checkValid1 = false;
+                                        boolean checkValidPrice = false;
                                         do {
                                             System.out.println("Nhập giá bạn muốn sửa");
                                             String input1 = scanner.nextLine();
@@ -303,12 +341,18 @@ public class FoodView {
                                                 price = 0;
                                                 continue;
                                             }
-                                            checkValid1 = ValidateUtils.isValidPrice(price);
-                                            if (checkValid1 == false) {
+                                            checkValidPrice = ValidateUtils.isValidPrice(price);
+                                            if (checkValidPrice == false) {
                                                 System.out.println("Giá không hợp lệ vui lòng nhập lại! Giá từ 0-200.000đ");
                                             }
-                                        } while (!checkValid1);
+                                        } while (!checkValidPrice);
                                         foods.get(i).setPriceFood(price);
+                                        for (int j = 0; j < foodsUpdate.size(); j++) {
+                                            if(foodsUpdate.get(j).getIdFood() == id) {
+                                                foodsUpdate.get(j).setPriceFood(price);
+                                            }
+                                        }
+                                        checkAction = true;
                                         break;
                                     case 4:
                                         noChange();
@@ -328,6 +372,11 @@ public class FoodView {
                                                     break;
                                             }
                                             foods.get(i).seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(type));
+                                            for (int j = 0; j < foodsUpdate.size(); j++) {
+                                                if(foodsUpdate.get(j).getIdFood() == id) {
+                                                    foodsUpdate.get(j).seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(type));
+                                                }
+                                            }
                                         }else if(foods.get(i).geteTypeOfFood().equals(ETypeOfFood.BAKERY)){
                                             switch (type) {
                                                 case "drink":
@@ -337,16 +386,25 @@ public class FoodView {
                                                     type = scanner.nextLine();
                                                     break;
                                             }
+                                            foods.get(i).seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(type));
+                                            for (int j = 0; j < foodsUpdate.size(); j++) {
+                                                if(foodsUpdate.get(j).getIdFood() == id) {
+                                                    foodsUpdate.get(j).seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(type));
+                                                }
+                                            }
                                         }
+                                        checkAction = true;
                                         break;
                                     case 5:
                                         foodView.editFoodById();
+                                        checkAction = true;
                                         break;
                                     default:
-                                        foodView.launcher();
+                                        System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                                        checkAction = false;
                                         break;
                                 }
-                            } while (checkAction);
+                            } while (!checkAction);
                             foods.set(i, foods.get(i));
                         }
                     }
@@ -358,6 +416,7 @@ public class FoodView {
                     break;
             }
         } while (!checkId);
+        fileService.writeData(FILE_PATH_FOOD_UPDATE,foodsUpdate);
         fileService.writeData(FILE_PATH_FOOD, foods);
         showFoodList();
         System.out.println("✔ Bạn đã cập nhật sản phẩm thành công ✔\n");
@@ -392,18 +451,26 @@ public class FoodView {
         }while (!checkType);
         boolean checkNameFood = false;
         do {
-            System.out.println("Nhập tên đồ uống, thức ăn:");
-            String name = scanner.nextLine();
-            if(name.equals("exit")) {
-                checkNameFood = true;
-                launcher();
-            }
-            int checkName = foodService.checkNameFood(name);
+            String nameFood = null;
+            boolean checkValidNameFood = false;
+                do {
+                    System.out.println("Nhập tên đồ uống, thức ăn (tối đa 40 kí tự):");
+                    nameFood = scanner.nextLine();
+                    if (nameFood.equals("exit")) {
+                        checkNameFood = true;
+                        launcher();
+                    }
+                    checkValidNameFood = ValidateUtils.isNameFood(nameFood);
+                    if (!checkValidNameFood) {
+                        System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
+                    }
+                } while (!checkValidNameFood);
+            int checkName = foodService.checkNameFood(nameFood);
             switch (checkName) {
                 case 1:
                     System.out.println("Sản phẩm đã có, mời bạn thêm số lượng");
                     int quantity = 0;
-                    boolean checkValid = false;
+                    boolean checkValidQuantity = false;
                     do {
                         System.out.println("Nhập số lượng");
                         String input = scanner.nextLine();
@@ -418,14 +485,14 @@ public class FoodView {
                             quantity = 0;
                             continue;
                         }
-                        checkValid = ValidateUtils.isQuantity(quantity);
-                        if (checkValid == false) {
+                        checkValidQuantity = ValidateUtils.isQuantity(quantity);
+                        if (checkValidQuantity == false) {
                             System.out.println("Số không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
                         }
-                    } while (checkValid == false);
+                    } while (checkValidQuantity == false);
                     int quantityNew = 0;
                     for (int i = 0; i < foods.size(); i++) {
-                        if (foods.get(i).getNameFood().equals(name)) {
+                        if (foods.get(i).getNameFood().equals(nameFood)) {
                             quantityNew = foods.get(i).getQuantity() + quantity; //thiếu validate <= 1000
                             food.setIdFood(foods.get(i).getIdFood());
                             food.setNameFood(foods.get(i).getNameFood());
@@ -439,7 +506,7 @@ public class FoodView {
                     break;
                 case -1:
                     int quantity1 = 0;
-                    boolean checkValid1 = false;
+                    boolean checkValidQuantity2 = false;
                     do {
                         System.out.println("Nhập số lượng");
                         String input = scanner.nextLine();
@@ -450,19 +517,19 @@ public class FoodView {
                         try {
                             quantity1 = Integer.parseInt(input);
                         } catch (NumberFormatException numberFormatException) {
-                            System.out.println("Số không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
+                            System.out.println("Nhập lỗi, vui lòng nhập lại! Số lượng từ 0-1000");
                             quantity1 = 0;
                             continue;
                         }
 
-                        checkValid1 = ValidateUtils.isQuantity(quantity1);
-                        if (checkValid1 == false) {
-                            System.out.println("Số không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
+                        checkValidQuantity2 = ValidateUtils.isQuantity(quantity1);
+                        if (checkValidQuantity2 == false) {
+                            System.out.println("Số lượng không đúng, vui lòng nhập lại! Số lượng từ 0-1000");
                         }
-                    } while (!checkValid1);
+                    } while (!checkValidQuantity2);
 
                     double price = 0;
-                    boolean checkValid2 = false;
+                    boolean checkValidPrice = false;
                     do {
                         System.out.println("Nhập giá");
                         String input = scanner.nextLine();
@@ -473,20 +540,20 @@ public class FoodView {
                         try {
                             price = Double.parseDouble(input);
                         } catch (NumberFormatException numberFormatException) {
-                            System.out.println("Giá không hợp lệ vui lòng nhập lại! Giá từ 0-200.000đ");
+                            System.out.println("Nhập lỗi, vui lòng nhập lại! Giá từ 0-200.000đ");
                             price = 0;
                             continue;
                         }
-                        checkValid2 = ValidateUtils.isValidPrice(price);     // false
-                        if (checkValid2 == false) {
-                            System.out.println("Giá không hợp lệ vui lòng nhập lại! Giá từ 0-200.000đ");
+                        checkValidPrice = ValidateUtils.isValidPrice(price);     // false
+                        if (checkValidPrice == false) {
+                            System.out.println("Giá không đúng vui lòng nhập lại! Giá từ 0-200.000đ");
                         }
-                    } while (!checkValid2);
+                    } while (!checkValidPrice);
 
                     foods.sort(new SortFoodByIDIncrease());
                     int id = foods.get(foods.size() - 1).getIdFood() + 1;
                     food.setIdFood(id);
-                    food.setNameFood(name);
+                    food.setNameFood(nameFood);
                     food.setQuantity(quantity1);
                     food.setPriceFood(price);
                     food.seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(typeOfFood));
@@ -514,7 +581,56 @@ public class FoodView {
         }
         System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
     }
+    public void showFoodListStepTenFood() throws IOException {
+        List<Food> foods = foodService.getAllFood();
+        System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
+        System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Food's name", "Quantity", "Price", "Type Of Food").println();
+        System.out.println("            ╠═══════╬══════════════════════════════╬═══════════╬════════════════╬═══════════════════╣");
+        for (int i = 0; i < 10; i++) {
+            System.out.printf(foods.get(i).foodView()).println();
+        }
+        System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
+        boolean checkShow = false;
 
+        int size = foods.size()-10;
+        int index = 10;
+        while (size >= 10) {
+            do {
+                System.out.println("Nhấn Enter để xem tiếp!");
+                String s = scanner.nextLine();
+                if (s == "") {
+                    System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
+                    for (int i = index; i < index + 10; i++) {
+                        if(size>=5){
+                            System.out.printf(foods.get(i).foodView()).println();
+                        }
+                    }
+                    System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
+                    index += 10;
+                    size -= 10;
+                    checkShow = true;
+                }else {
+                    checkShow = false;
+                }
+            }while (!checkShow);
+        }
+        boolean checkShow2 = false;
+        do {
+            System.out.println("Nhấn Enter để xem tiếp!");
+            String s = scanner.nextLine();
+            if (s == "") {
+                System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
+                for (int i = size; i > 1; i--) {
+                    System.out.printf(foods.get(foods.size() - size).foodView()).println();
+                }
+                System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
+                checkShow2 = true;
+            }else {
+                checkShow2 = false;
+            }
+        }while (!checkShow2);
+
+    }
     public void showFoodList(List<Food> foods) throws IOException {
         System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
         System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Food's name", "Quantity", "Price", "Type Of Food").println();

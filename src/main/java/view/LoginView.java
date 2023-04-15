@@ -47,7 +47,7 @@ public class LoginView {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                                                                                   ║");
         System.out.println("                               ║                           HỆ THỐNG QUẢN LÝ PHÚC LONG COFFEE!                      ║");
-        System.out.println("                               ║-----------------------------BẢNG ĐIỀU KHIỂN ĐĂNG NHẬP ADMIN-----------------------║");
+        System.out.println("                               ║---------------------------BẢNG ĐIỀU KHIỂN ĐĂNG NHẬP CUSTOMER----------------------║");
         System.out.println("                               ║                          Đăng nhập bằng tài khoản khách hàng!!!                   ║");
         System.out.println("                               ║                                                                                   ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
@@ -133,11 +133,7 @@ public class LoginView {
         if (password.equals("exit")) {
             menu.login();
         }
-        System.out.println("Nhập họ và tên của bạn:");
-        String fullName = scanner.nextLine();
-        if (fullName.equals("exit")) {
-            menu.login();
-        }
+        inputFullName(user);
         inputPhoneNumber(user);
         boolean checkGender = false;
         String gender = null;
@@ -180,13 +176,13 @@ public class LoginView {
         }while (!checkBirthDay);
         inputEmail(user);
         System.out.println("Nhập địa chỉ của bạn:");
-        String address = scanner.nextLine();
-        if (address.equals("exit")) {
+        String inputAddress = scanner.nextLine() ;
+        if (inputAddress.equals("exit")) {
             menu.login();
         }
+        String address = ValidateUtils.parseCommaToChar(inputAddress);
         user.setId(userList.get(userList.size() - 1).getId() + 1);
         user.setPassword(password);
-        user.setFullName(fullName);
         user.setGender(EGender.getEGenderByName(gender));
         user.setBirthDay(DateFormat.parseDate(date));
         user.setAddress(address);
@@ -280,7 +276,29 @@ public class LoginView {
         } while (!checkPhoneNumber);
         user.setPhoneNumber(phoneNumber);
     }
-
+    public void inputFullName(User user) throws IOException {
+        Menu menu = new Menu();
+        String fullName = null;
+        boolean checkValid = false;
+        boolean checkFullName = false;
+        do {
+            do {
+                System.out.println("Nhập họ và tên:");
+                fullName = scanner.nextLine();
+                if (fullName.equals("exit")) {
+                    checkFullName = true;
+                    menu.login();
+                }
+                checkValid = ValidateUtils.isFullName(fullName);
+                if (!checkValid) {
+                    System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
+                }else {
+                    checkFullName = true;
+                }
+            } while (!checkValid);
+        } while (!checkFullName);
+        user.setFullName(fullName);
+    }
     public void inputUserName(User user) throws IOException {
         Menu menu = new Menu();
         String username = null;
@@ -309,7 +327,40 @@ public class LoginView {
         } while (!checkUserName);
         user.setUsername(username);
     }
+    public void editFullName() throws IOException {
+        List<User> users = userService.getAllUserUse();
+        List<User> userList = userService.getAllUser();
+        System.out.println("Nhập họ và tên mới của bạn:");
 
+        String fullName = null;
+        boolean checkValid = false;
+        boolean checkFullName = false;
+        do {
+            do {
+                System.out.println("Nhập họ và tên:");
+                fullName = scanner.nextLine();
+                if (fullName.equals("exit")) {
+                    checkFullName = true;
+                    menu.login();
+                }
+                checkValid = ValidateUtils.isFullName(fullName);
+                if (!checkValid) {
+                    System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
+                }else {
+                    checkFullName = true;
+                }
+            } while (!checkValid);
+        } while (!checkFullName);
+        users.get(0).setFullName(fullName);
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUsername().equals(users.get(0).getUsername())) {
+                userList.get(i).setFullName(fullName);
+            }
+        }
+        fileService.writeData(FILE_PATH_USERUSE, users);
+        fileService.writeData(FILE_PATH_USER, userList);
+        System.out.println("✔ Bạn đã thay họ và tên thành công ✔\n");
+    }
     public void editPassWord() throws IOException {
         Menu menu = new Menu();
         List<User> users = userService.getAllUserUse();
@@ -429,10 +480,11 @@ public class LoginView {
         List<User> users = userService.getAllUserUse();
         List<User> userList = userService.getAllUser();
         System.out.println("Nhập Email của bạn:");
-        String address = scanner.nextLine();
-        if (address.equals("exit")) {
+        String inputAddress = scanner.nextLine();
+        if (inputAddress.equals("exit")) {
             menu.menuLogin();
         }
+        String address = ValidateUtils.parseCommaToChar(inputAddress);
         users.get(0).setAddress(address);
         for (int i = 0; i < userList.size(); i++) {
             if (userList.get(i).getUsername().equals(users.get(0).getUsername())) {

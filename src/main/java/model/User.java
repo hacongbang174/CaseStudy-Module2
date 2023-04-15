@@ -2,6 +2,7 @@ package model;
 
 import repository.IModel;
 import utils.DateFormat;
+import utils.ValidateUtils;
 
 import java.util.Date;
 
@@ -72,7 +73,7 @@ public class User implements IModel<User> {
         String cccd = strings[6];
         Date birthDay = DateFormat.parseDate(strings[7]);
         String email = strings[8];
-        String address = strings[9];
+        String address = ValidateUtils.parseCharToComma(strings[9]);
         ERole eRole = ERole.getRoleByName(strings[10]);
 
         user.setId(id);
@@ -181,6 +182,6 @@ public class User implements IModel<User> {
 
     @Override
     public String toString() {
-        return id + "," + username + "," + password + "," + fullName + "," + phoneNumber + "," + gender.getName() + "," + cccd + "," + DateFormat.convertDateToString(birthDay) + "," + email + "," + address + "," + eRole.getName();
+        return id + "," + username + "," + password + "," + fullName + "," + phoneNumber + "," + gender.getName() + "," + cccd + "," + DateFormat.convertDateToString(birthDay) + "," + email + "," + ValidateUtils.parseCommaToChar(address) + "," + eRole.getName();
     }
 }

@@ -2,6 +2,7 @@ package model;
 
 import repository.IModel;
 import utils.CurrencyFormat;
+import utils.ValidateUtils;
 
 import java.util.Currency;
 

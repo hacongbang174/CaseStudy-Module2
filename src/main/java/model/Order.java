@@ -3,6 +3,7 @@ package model;
 import repository.IModel;
 import utils.CurrencyFormat;
 import utils.DateFormat;
+import utils.ValidateUtils;
 
 import java.util.Date;
 

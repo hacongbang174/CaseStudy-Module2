@@ -36,9 +36,10 @@ public class CustomerView {
         System.out.println("                               ║                   [7] Chỉnh sửa số lượng món đã order theo id order               ║");
         System.out.println("                               ║                   [8] Xóa món khỏi order theo id order                            ║");
         System.out.println("                               ║                   [9] Xem lịch sử order món                                       ║");
-        System.out.println("                               ║                   [10] Thanh toán                                                 ║");
-        System.out.println("                               ║                   [11] Quản lý tài khoản                                          ║");
-        System.out.println("                               ║                   [12] Đăng xuất                                                  ║");
+        System.out.println("                               ║                   [10] Xem lịch sử mua hàng                                       ║");
+        System.out.println("                               ║                   [11] Thanh toán                                                 ║");
+        System.out.println("                               ║                   [12] Quản lý tài khoản                                          ║");
+        System.out.println("                               ║                   [13] Đăng xuất                                                  ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
     public void launcher() throws IOException {
@@ -57,51 +58,64 @@ public class CustomerView {
             switch (select) {
                 case 1:
                     foodView.showFoodList();
+                    checkAction = checkActionContinue();
                     break;
                 case 2:
                     foodView.showFoodListByType();
+                    checkAction = checkActionContinue();
                     break;
                 case 3:
                     foodView.sortByPriceIncrease();
+                    checkAction = checkActionContinue();
                     break;
                 case 4:
                     foodView.sortByPriceDecrease();
+                    checkAction = checkActionContinue();
                     break;
                 case 5:
                     foodView.searchFoodByKeyword();
+                    checkAction = checkActionContinue();
                     break;
                 case 6:
                     orderView.addFoodInOderByIdCustomer();
+                    checkAction = checkActionContinue();
                     break;
                 case 7:
                     orderView.editQuantityFoodInOderByIdOder();
+                    checkAction = checkActionContinue();
                     break;
                 case 8:
                     orderView.deleteFoodOutOderByIdOder();
+                    checkAction = checkActionContinue();
                     break;
                 case 9:
                     orderView.showHistoryOder();
+                    checkAction = checkActionContinue();
                     break;
                 case 10:
-                    orderView.payOder();
+                    orderView.showHistoryOderPaid();
+                    checkAction = checkActionContinue();
                     break;
                 case 11:
-                    launcherAccount();
+                    orderView.payOder();
+                    checkAction = checkActionContinue();
                     break;
                 case 12:
+                    launcherAccount();
+                    checkAction = checkActionContinue();
+                    break;
+                case 13:
                     fileService.clearData(FILE_PATH_USERUSE);
                     Menu menu = new Menu();
                     menu.login();
                     break;
                 default:
                     System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    checkAction = false;
                     break;
             }
-            checkAction = checkActionContinue();
         }while (checkAction);
         if(checkAction) {
-            launcher();
-        }else {
             launcher();
         }
     }
@@ -110,11 +124,12 @@ public class CustomerView {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                               Giao diện quản lý tài khoản                         ║");
         System.out.println("                               ║                         [1] Hiển thị thông tin tài khoản                          ║");
-        System.out.println("                               ║                         [2] Thay đổi mật khẩu đăng nhập                           ║");
-        System.out.println("                               ║                         [3] Thay đổi số điện thoại                                ║");
-        System.out.println("                               ║                         [4] Thay đổi email                                        ║");
-        System.out.println("                               ║                         [5] Thay đổi địa chỉ                                      ║");
-        System.out.println("                               ║                         [6] Quay lại                                              ║");
+        System.out.println("                               ║                         [2] Thay đổi họ và tên của bạn                            ║");
+        System.out.println("                               ║                         [3] Thay đổi mật khẩu đăng nhập                           ║");
+        System.out.println("                               ║                         [4] Thay đổi số điện thoại                                ║");
+        System.out.println("                               ║                         [5] Thay đổi email                                        ║");
+        System.out.println("                               ║                         [6] Thay đổi địa chỉ                                      ║");
+        System.out.println("                               ║                         [7] Quay lại                                              ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
     public void launcherAccount() throws IOException {
@@ -134,31 +149,39 @@ public class CustomerView {
             switch (select) {
                 case 1:
                     loginView.showInfoAccount();
+                    checkAction = checkActionContinue();
                     break;
                 case 2:
-                    loginView.editPassWord();
+                    loginView.editFullName();
+                    checkAction = checkActionContinue();
                     break;
                 case 3:
-                    loginView.editPhoneNumber();
+                    loginView.editPassWord();
+                    checkAction = checkActionContinue();
                     break;
                 case 4:
-                    loginView.editEmail();
+                    loginView.editPhoneNumber();
+                    checkAction = checkActionContinue();
                     break;
                 case 5:
-                    loginView.editAddress();
+                    loginView.editEmail();
+                    checkAction = checkActionContinue();
                     break;
                 case 6:
+                    loginView.editAddress();
+                    checkAction = checkActionContinue();
+                    break;
+                case 7:
                     customerView.launcher();
+                    checkAction = checkActionContinue();
                     break;
                 default:
                     System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    checkAction = false;
                     break;
             }
-            checkAction = checkActionContinue();
-        }while (checkAction);
+        }while (!checkAction);
         if(checkAction) {
-            launcherAccount();
-        }else {
             launcher();
         }
     }
@@ -169,13 +192,13 @@ public class CustomerView {
             String choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "Y":
-                    return true;
-                case "N":
                     return false;
+                case "N":
+                    return true;
                 default:
-                    checkActionContinue = true;
+                    checkActionContinue = false;
             }
-        } while (checkActionContinue);
+        } while (!checkActionContinue);
         return false;
     }
 }

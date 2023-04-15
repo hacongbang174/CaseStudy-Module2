@@ -11,7 +11,14 @@ public class ValidateUtils {
     public static final  String DAY_REGEX = "^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)$"; //01-01-2023
     public static final  String BIRTHDAY_REGEX = "^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)$"; //01/01/2023
     public static final String MONTH_REGEX = "^(0?[1-9]|1[012])-((19|20)\\d\\d)$"; // 04-2023
-
+    public static final String FULLNAME_REGEX = "^[\\p{L} \\.'-]+$";
+    public static final String NAMEFOOD_REGEX = "^[\\p{L}0-9\\s\\.\\,\\-'()]{1,40}$";
+    public static boolean isNameFood (String nameFood) {
+        return Pattern.matches(NAMEFOOD_REGEX, nameFood);
+    }
+    public static boolean isFullName (String fullName) {
+        return Pattern.matches(FULLNAME_REGEX, fullName);
+    }
     public static boolean isPhoneNumber(String number) {
         return Pattern.matches(PHONENUMBER_REGEX, number);
     }
@@ -48,4 +55,13 @@ public class ValidateUtils {
         }
         return false;
     }
+    public static String parseCommaToChar(String s) {
+        String s1 = s.replaceAll(",", "!");
+        return s1;
+    }
+    public static String parseCharToComma(String s) {
+        String s1 = s.replaceAll("!", ",");
+        return s1;
+    }
+
 }

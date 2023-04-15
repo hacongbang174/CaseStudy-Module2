@@ -19,7 +19,7 @@ public class Menu {
         System.out.println("                               ║                                                                                   ║");
         System.out.println("                               ║                              PHÚC LONG COFFEE XIN KÍNH CHÀO!                      ║");
         System.out.println("                               ║                               [1] Đăng nhập bằng Admin                            ║");
-        System.out.println("                               ║                               [2] Đặng nhập bằng khách hàng                       ║");
+        System.out.println("                               ║                               [2] Đăng nhập bằng khách hàng                       ║");
         System.out.println("                               ║                               [3] Đăng ký tài khoản                               ║");
         System.out.println("                               ║                               [4] Thoát                                           ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
