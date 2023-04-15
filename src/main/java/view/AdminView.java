@@ -66,6 +66,8 @@ public class AdminView {
         }while (!checkAction);
         if(checkAction) {
             launcher();
+        }else {
+            launcher();
         }
     }
     public  void menuOderManager(){
@@ -115,6 +117,8 @@ public class AdminView {
             checkAction = checkActionContinue();
         }while (!checkAction);
         if(checkAction) {
+            launcherOder();
+        }else {
             launcher();
         }
     }
@@ -161,13 +165,15 @@ public class AdminView {
             checkAction = checkActionContinue();
         }while (!checkAction);
         if(checkAction) {
+            launcherRevenue();
+        }else {
             launcher();
         }
     }
     public boolean checkActionContinue() {
         boolean checkActionContinue = false;
         do {
-            System.out.println("Nhập Y để quay về giao diện trước đó, nhập N để quay về giao diện AdminView!");
+            System.out.println("Nhập \"Y\" để quay về giao diện trước đó, nhập \"N\" để quay về giao diện Admin!");
             String choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "Y":
@@ -180,8 +186,4 @@ public class AdminView {
         } while (!checkActionContinue);
         return true;
     }
-//    public static void main(String[] args) throws IOException {
-//        AdminView adminView = new AdminView();
-//        adminView.launcher();
-//    }
 }

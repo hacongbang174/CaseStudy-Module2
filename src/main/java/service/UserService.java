@@ -19,15 +19,6 @@ public class UserService {
     public List<User> getAllUser() throws IOException {
         return userRepository.getAll();
     }
-//    public User loginCustomer(String username, String password) throws IOException {
-//        List<User> allUsers = getAllUser();
-//        for (int i = 0; i < allUsers.size(); i++) {
-//            if(allUsers.get(i).getUsername().equals(username) && allUsers.get(i).getPassword().equals(password) && allUsers.get(i).geteRole() == ERole.customer) {
-//                return allUsers.get(i);
-//            }
-//        }
-//        return null;
-//    }
     public boolean checkLoginAdmin(String username, String pass) throws IOException {
         List<User> allUsers = getAllUser();
         for (int i = 0; i < allUsers.size(); i++) {
@@ -56,19 +47,6 @@ public class UserService {
         }
         return customerList;
     }
-    public void deleteById(int id) throws IOException {
-        userRepository.deleteById(id);
-    }
-
-    public User loginAdmin(String username, String password) throws IOException {
-        List<User> allUsers = getAllUser();
-        for (int i = 0; i < allUsers.size(); i++) {
-            if(allUsers.get(i).getUsername().equals(username) && allUsers.get(i).getPassword().equals(password) && allUsers.get(i).geteRole().equals(ERole.admin)) {
-                return allUsers.get(i);
-            }
-        }
-        return null;
-    }
     public User loginCustomer(String username, String password) throws IOException {
         List<User> allUsers = getAllUser();
         for (int i = 0; i < allUsers.size(); i++) {
@@ -86,15 +64,6 @@ public class UserService {
             }
         }
         return false;
-    }
-    public int checkNameCustomer(String nameCustomer) throws IOException {
-        List<User> allUsers = getAllUser();
-        for (int i = 0; i < allUsers.size(); i++) {
-            if(allUsers.get(i).getFullName().equals(nameCustomer) && allUsers.get(i).geteRole().equals(ERole.customer)) {
-                return 1;
-            }
-        }
-        return -1;
     }
     public boolean checkPhoneNumber(String phoneNumber) throws IOException {
         List<User> allUsers = getAllUser();

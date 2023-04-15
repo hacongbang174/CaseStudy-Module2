@@ -89,7 +89,7 @@ public class Order implements IModel<Order> {
     }
 
     public Date getCreateDateOder() {
-        return createDateOder;
+        return this.createDateOder;
     }
 
     public void setCreateDateOder(Date createDateOder) {

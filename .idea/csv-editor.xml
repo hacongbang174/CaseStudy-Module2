@@ -17,14 +17,14 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\data\oder.csv">
+        <entry key="\src\main\data\order.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\src\main\data\oderAll.csv">
+        <entry key="\src\main\data\orderAll.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

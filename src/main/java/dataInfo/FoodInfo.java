@@ -1,13 +1,9 @@
 package dataInfo;
 
-import model.ETypeOfFood;
-import model.Food;
-
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,7 +56,6 @@ public class FoodInfo {
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(content);
             while (matcher.find()) {
-//                System.out.println(matcher.group(1));
                 list.add((E) matcher.group(1));
             }
         } catch (IOException e) {
@@ -100,7 +95,5 @@ public class FoodInfo {
             e.printStackTrace();
         }
     }
-//    public static void inputDrinkInfo(String url, String key) {
-//
-//    }
+
 }

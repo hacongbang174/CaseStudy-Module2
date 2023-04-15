@@ -20,7 +20,6 @@ public class LoginView {
     private final String FILE_PATH_USER = "./src/main/data/user.csv";
     private final String FILE_PATH_USERUSE = "./src/main/data/userUse.csv";
     private Menu menu;
-    private static User currentUser = null;
     private UserService userService;
     private FileService fileService;
     private Scanner scanner;
@@ -118,14 +117,6 @@ public class LoginView {
         if (count == 3) {
             menu.login();
         }
-    }
-
-    public static boolean checkLogin() {
-        if (currentUser == null) {
-            System.out.println("Vui lòng đăng nhập trước khi sử dụng chức năng này!");
-            return false;
-        }
-        return true;
     }
 
     public void signUp() throws IOException {
@@ -476,8 +467,4 @@ public class LoginView {
         System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: exit ⦿ ");
     }
 
-//    public static void main(String[] args) throws IOException {
-//        LoginView loginView = new LoginView();
-//        loginView.editPhoneNumber();
-//    }
 }

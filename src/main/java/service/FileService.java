@@ -78,9 +78,4 @@ public class FileService {
             printWriter.close();
         }
     }
-
-//    public static void main(String[] args) throws IOException {
-//        List<Food> list = readData("./src/main/data/food.csv", Food.class);
-//        System.out.println(list.get(0));
-//    }
 }

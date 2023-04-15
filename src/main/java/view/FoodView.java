@@ -32,12 +32,12 @@ public class FoodView {
         System.out.println("                               ║                               Giao diện đồ uống, thức ăn                          ║");
         System.out.println("                               ║                        1. Hiển thị danh sách đồ uống, thức ăn                     ║");
         System.out.println("                               ║                        2. Hiển thị danh sách đồ uống, thức ăn theo danh mục       ║");
-        System.out.println("                               ║                        3. Thêm đồ uống, thức ăn                                   ║");
-        System.out.println("                               ║                        4. Chỉnh sửa đồ uống, thức ăn theo id                      ║");
-        System.out.println("                               ║                        5. Tìm kiếm đồ uống, thức ăn theo id                       ║");
-        System.out.println("                               ║                        6. Xóa đồ uống, thức ăn theo id                            ║");
-        System.out.println("                               ║                        7. Sắp xếp đồ uống, thức ăn theo giá tăng dần              ║");
-        System.out.println("                               ║                        8. Sắp xếp đồ uống, thức ăn theo giá giảm dần              ║");
+        System.out.println("                               ║                        3. Hiển thị đồ uống, thức ăn theo giá tăng dần             ║");
+        System.out.println("                               ║                        4. Hiển thị đồ uống, thức ăn theo giá giảm dần             ║");
+        System.out.println("                               ║                        5. Thêm đồ uống, thức ăn                                   ║");
+        System.out.println("                               ║                        6. Chỉnh sửa đồ uống, thức ăn theo id                      ║");
+        System.out.println("                               ║                        7. Tìm kiếm đồ uống, thức ăn theo id                       ║");
+        System.out.println("                               ║                        8. Xóa đồ uống, thức ăn theo id                            ║");
         System.out.println("                               ║                        9. Quay lại                                                ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
@@ -63,23 +63,24 @@ public class FoodView {
                     showFoodListByType();
                     break;
                 case 3:
-                    addFood();
-                    break;
-                case 4:
-                    editFoodById();
-                    break;
-                case 5:
-                    findFoodById();
-                    break;
-                case 6:
-                    deleteFoodById();
-                    break;
-                case 7:
                     sortByPriceIncrease();
                     break;
-                case 8:
+                case 4:
                     sortByPriceDecrease();
                     break;
+                case 5:
+                    addFood();
+                    break;
+                case 6:
+                    editFoodById();
+                    break;
+                case 7:
+                    findFoodById();
+                    break;
+                case 8:
+                    deleteFoodById();
+                    break;
+
                 case 9:
                     AdminView adminView = new AdminView();
                     adminView.launcher();
@@ -122,30 +123,20 @@ public class FoodView {
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
 
-
     public void sortByPriceDecrease() throws IOException {
         List<Food> foods = foodService.getAllFood();
         foods.sort(new SortFoodByPriceDecrease());
         fileService.writeData(FILE_PATH_FOOD, foods);
         showFoodList();
-        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
+//        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
     public void sortByPriceIncrease() throws IOException {
         List<Food> foods = foodService.getAllFood();
         foods.sort(new SortFoodByPriceIncrease());
         fileService.writeData(FILE_PATH_FOOD, foods);
         showFoodList();
-        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
+//        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
-
-    public void sortByIdIncrease() throws IOException {
-        List<Food> foods = foodService.getAllFood();
-        foods.sort(new SortFoodByIDIncrease());
-        fileService.writeData(FILE_PATH_FOOD, foods);
-        showFoodList();
-        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
-    }
-
     public void findFoodById() throws IOException {
         List<Food> foods = foodService.getAllFood();
         boolean checkAction = false;
@@ -395,7 +386,7 @@ public class FoodView {
                     break;
                 default:
                     checkType = false;
-                    System.out.println("Nhập sai, xin mời nhập lại (drink/bakery):");
+                    System.out.println("Nhập sai, xin mời nhập lại! \"drink\" or \"bakery\":");
                     break;
             }
         }while (!checkType);
@@ -514,7 +505,7 @@ public class FoodView {
 
     public void showFoodList() throws IOException {
         List<Food> foods = foodService.getAllFood();
-        foods.sort(new SortFoodByIDIncrease());
+//        foods.sort(new SortFoodByIDIncrease());
         System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
         System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Food's name", "Quantity", "Price", "Type Of Food").println();
         System.out.println("            ╠═══════╬══════════════════════════════╬═══════════╬════════════════╬═══════════════════╣");
@@ -555,7 +546,7 @@ public class FoodView {
                     break;
                 default:
                     checkType = false;
-                    System.out.println("Nhập sai, xin mời nhập lại (drink/bakery):");
+                    System.out.println("Nhập sai, xin mời nhập lại! \"drink\" or \"bakery\":");
                     break;
             }
         }while (!checkType);
@@ -570,47 +561,6 @@ public class FoodView {
 
         }
         System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
-    }
-
-    public void inputFoodPrice(Food food) {
-        double price = 0;
-        boolean checkValid = false;
-        do {
-            System.out.println("Nhập giá");
-            try {
-                price = Double.parseDouble(scanner.nextLine());
-            } catch (NumberFormatException numberFormatException) {
-                System.out.println("Giá không hợp lệ vui lòng nhập lại! Giá từ 0-200.000đ");
-                price = 0;
-                continue;
-            }
-            checkValid = ValidateUtils.isValidPrice(price);     // false
-            if (checkValid == false) {
-                System.out.println("Giá không hợp lệ vui lòng nhập lại! Giá từ 0-200.000đ");
-            }
-        } while (checkValid == false);
-
-        food.setPriceFood(price);
-    }
-
-    public void inputFoodQuantity(Food food) {
-        int quantity = 0;
-        boolean checkValid = false;
-        do {
-            System.out.println("Nhập số lượng");
-            try {
-                quantity = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException numberFormatException) {
-                System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
-                quantity = 0;
-                continue;
-            }
-            checkValid = ValidateUtils.isQuantity(quantity);
-            if (checkValid == false) {
-                System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
-            }
-        } while (checkValid == false);
-        food.setQuantity(quantity);
     }
 
     public void searchFoodByKeyword() throws IOException {
@@ -644,15 +594,7 @@ public class FoodView {
     }
 
     public void noChange() {
-        System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: exit ⦿ ");
+        System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: \"exit\" ⦿ ");
     }
 
-    public static void main(String[] args) throws IOException {
-        FoodView foodView = new FoodView();
-//        foodView.showFoodListByType();
-//        foodView.addFood();
-//        foodView.editFoodById();
-//        foodView.findFoodById();
-        foodView.launcher();
-    }
 }

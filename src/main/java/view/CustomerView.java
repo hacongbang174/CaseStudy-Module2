@@ -29,14 +29,16 @@ public class CustomerView {
         System.out.println("                               ║                                    Giao diện Customer                             ║");
         System.out.println("                               ║                   [1] Xem danh sách đồ uống, thức ăn                              ║");
         System.out.println("                               ║                   [2] Xem danh sách đồ uống, thức ăn theo danh mục                ║");
-        System.out.println("                               ║                   [3] Tìm kiếm đồ uống, thức ăn theo keyword                      ║");
-        System.out.println("                               ║                   [4] Thêm món vào order theo id đồ uống, thức ăn                 ║");
-        System.out.println("                               ║                   [5] Chỉnh sửa số lượng món đã order theo id order               ║");
-        System.out.println("                               ║                   [6] Xóa món khỏi order theo id order                            ║");
-        System.out.println("                               ║                   [7] Xem lịch sử order món                                       ║");
-        System.out.println("                               ║                   [8] Thanh toán                                                  ║");
-        System.out.println("                               ║                   [9] Quản lý tài khoản                                           ║");
-        System.out.println("                               ║                   [10] Đăng xuất                                                  ║");
+        System.out.println("                               ║                   [3] Xem danh sách đồ uống, thức ăn theo giá tăng dần            ║");
+        System.out.println("                               ║                   [4] Xem danh sách đồ uống, thức ăn theo giá giảm dần            ║");
+        System.out.println("                               ║                   [5] Tìm kiếm đồ uống, thức ăn theo keyword                      ║");
+        System.out.println("                               ║                   [6] Thêm món vào order theo id đồ uống, thức ăn                 ║");
+        System.out.println("                               ║                   [7] Chỉnh sửa số lượng món đã order theo id order               ║");
+        System.out.println("                               ║                   [8] Xóa món khỏi order theo id order                            ║");
+        System.out.println("                               ║                   [9] Xem lịch sử order món                                       ║");
+        System.out.println("                               ║                   [10] Thanh toán                                                 ║");
+        System.out.println("                               ║                   [11] Quản lý tài khoản                                          ║");
+        System.out.println("                               ║                   [12] Đăng xuất                                                  ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
     public void launcher() throws IOException {
@@ -60,27 +62,33 @@ public class CustomerView {
                     foodView.showFoodListByType();
                     break;
                 case 3:
-                    foodView.searchFoodByKeyword();
+                    foodView.sortByPriceIncrease();
                     break;
                 case 4:
-                    orderView.addFoodInOderByIdCustomer();
+                    foodView.sortByPriceDecrease();
                     break;
                 case 5:
-                    orderView.editQuantityFoodInOderByIdOder();
+                    foodView.searchFoodByKeyword();
                     break;
                 case 6:
-                    orderView.deleteFoodOutOderByIdOder();
+                    orderView.addFoodInOderByIdCustomer();
                     break;
                 case 7:
-                    orderView.showHistoryOder();
+                    orderView.editQuantityFoodInOderByIdOder();
                     break;
                 case 8:
-                    orderView.payOder();
+                    orderView.deleteFoodOutOderByIdOder();
                     break;
                 case 9:
-                    launcherAccount();
+                    orderView.showHistoryOder();
                     break;
                 case 10:
+                    orderView.payOder();
+                    break;
+                case 11:
+                    launcherAccount();
+                    break;
+                case 12:
                     fileService.clearData(FILE_PATH_USERUSE);
                     Menu menu = new Menu();
                     menu.login();
@@ -92,6 +100,8 @@ public class CustomerView {
             checkAction = checkActionContinue();
         }while (checkAction);
         if(checkAction) {
+            launcher();
+        }else {
             launcher();
         }
     }
@@ -147,13 +157,15 @@ public class CustomerView {
             checkAction = checkActionContinue();
         }while (checkAction);
         if(checkAction) {
+            launcherAccount();
+        }else {
             launcher();
         }
     }
     public boolean checkActionContinue() {
         boolean checkActionContinue = false;
         do {
-            System.out.println("Nhập Y để quay về giao diện trước đó, nhập N để quay về giao diện CustomerView!");
+            System.out.println("Nhập \"Y\" để quay về giao diện trước đó, nhập \"N\" để quay về giao diện Customer!");
             String choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "Y":
@@ -165,10 +177,5 @@ public class CustomerView {
             }
         } while (checkActionContinue);
         return false;
-    }
-
-    public static void main(String[] args) throws IOException {
-        CustomerView customerView = new CustomerView();
-        customerView.launcher();
     }
 }

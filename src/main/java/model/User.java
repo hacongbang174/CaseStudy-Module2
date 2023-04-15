@@ -31,21 +31,6 @@ public class User implements IModel<User> {
         this.address = address;
         this.eRole = eRole;
     }
-
-    //    public User(String raw) {
-//        String [] strings = raw.split(",");
-//        this.id = Integer.parseInt(strings[0]);
-//        this.username = strings[1];
-//        this.password = strings[2];
-//        this.fullName = strings[3];
-//        this.phoneNumber = strings[4];
-//        this.gender = EGender.getEGenderByName(strings[5]);
-//        this.cccd = Integer.parseInt(strings[6]);
-//        this.birthDay = DateFormat.parseDate(strings[7]);
-//        this.email = strings[8];
-//        this.address = strings[9];
-//        this.eRole = ERole.valueOf(strings[10]);
-//    }
     public User() {
 
     }
