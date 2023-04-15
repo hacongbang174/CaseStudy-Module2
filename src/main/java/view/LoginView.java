@@ -59,15 +59,16 @@ public class LoginView {
         int count = 0;
         menuLoginAdmin();
         do {
+            noChange();
             System.out.println("Nhập tên đăng nhập:");
             String username = scanner.nextLine();
-            if (username.equals("exit")) {
+            if (username.equals("0")) {
                 count = 3;
                 menu.login();
             }
             System.out.println("Nhập mật khẩu:");
             String password = scanner.nextLine();
-            if (password.equals("exit")) {
+            if (password.equals("0")) {
                 count = 3;
                 menu.login();
             }
@@ -81,6 +82,7 @@ public class LoginView {
             }
         } while (count != 3);
         if (count == 3) {
+            System.out.println("Bạn đã nhập sai quá 3 lần! Vui lòng chọn lại chức năng!");
             menu.login();
         }
     }
@@ -89,15 +91,16 @@ public class LoginView {
         int count = 0;
         menuLoginCustomer();
         do {
+            noChange();
             System.out.println("Nhập tên đăng nhập:");
             String username = scanner.nextLine();
-            if (username.equals("exit")) {
+            if (username.equals("0")) {
                 count = 3;
                 menu.login();
             }
             System.out.println("Nhập mật khẩu:");
             String password = scanner.nextLine();
-            if (password.equals("exit")) {
+            if (password.equals("0")) {
                 count = 3;
                 menu.login();
             }
@@ -115,12 +118,12 @@ public class LoginView {
             }
         } while (count != 3);
         if (count == 3) {
+            System.out.println("Bạn đã nhập sai quá 3 lần! Vui lòng chọn lại chức năng!");
             menu.login();
         }
     }
 
     public void signUp() throws IOException {
-        noChange();
         List<User> userList = userService.getAllUser();
         userList.sort(new SortUserById());
         User user = new User();
@@ -128,9 +131,10 @@ public class LoginView {
 //        long cccd, Date birthDay, String email, String address, ERole eRole
         System.out.println("Nhập các thông tin của bạn!");
         inputUserName(user);
+        noChange();
         System.out.println("Nhập password của bạn:");
         String password = scanner.nextLine();
-        if (password.equals("exit")) {
+        if (password.equals("0")) {
             menu.login();
         }
         inputFullName(user);
@@ -138,6 +142,7 @@ public class LoginView {
         boolean checkGender = false;
         String gender = null;
         do {
+            noChange();
             System.out.println("Nhập giới tính của bạn: male/female/other");
             gender = scanner.nextLine();
             switch (gender) {
@@ -150,7 +155,7 @@ public class LoginView {
                 case "other":
                     checkGender = true;
                     break;
-                case "exit":
+                case "0":
                     checkGender = true;
                     menu.login();
                     break;
@@ -164,9 +169,10 @@ public class LoginView {
         boolean checkBirthDay = false;
         String date = null;
         do {
+            noChange();
             System.out.println("Nhập ngày tháng năm sinh: dd/MM/yyyy");
             date = scanner.nextLine();
-            if (date.equals("exit")) {
+            if (date.equals("0")) {
                 menu.login();
             }
             checkBirthDay = ValidateUtils.isBirthDay(date);
@@ -175,9 +181,10 @@ public class LoginView {
             }
         }while (!checkBirthDay);
         inputEmail(user);
+        noChange();
         System.out.println("Nhập địa chỉ của bạn:");
         String inputAddress = scanner.nextLine() ;
-        if (inputAddress.equals("exit")) {
+        if (inputAddress.equals("0")) {
             menu.login();
         }
         String address = ValidateUtils.parseCommaToChar(inputAddress);
@@ -199,9 +206,10 @@ public class LoginView {
         boolean checkEmail = false;
         do {
             do {
+                noChange();
                 System.out.println("Nhập Email của bạn:");
                 email = scanner.nextLine();
-                if (email.equals("exit")) {
+                if (email.equals("0")) {
                     checkEmail = true;
                     menu.login();
                 }
@@ -227,9 +235,10 @@ public class LoginView {
         boolean checkCCCD = false;
         do {
             do {
+                noChange();
                 System.out.println("Nhập số CCCD của bạn: Bắt đầu bằng 0 và có 12 số!");
                 cccd = scanner.nextLine();
-                if(cccd.equals("exit")) {
+                if(cccd.equals("0")) {
                     checkCCCD = true;
                     menu.login();
                 }
@@ -255,9 +264,10 @@ public class LoginView {
         boolean checkPhoneNumber = false;
         do {
             do {
+                noChange();
                 System.out.println("Nhập số điện thoại của bạn:");
                 phoneNumber = scanner.nextLine();
-                if(phoneNumber.equals("exit")) {
+                if(phoneNumber.equals("0")) {
                     checkPhoneNumber = true;
                     menu.login();
                 }
@@ -283,9 +293,10 @@ public class LoginView {
         boolean checkFullName = false;
         do {
             do {
+                noChange();
                 System.out.println("Nhập họ và tên:");
                 fullName = scanner.nextLine();
-                if (fullName.equals("exit")) {
+                if (fullName.equals("0")) {
                     checkFullName = true;
                     menu.login();
                 }
@@ -306,15 +317,16 @@ public class LoginView {
         boolean checkUserName = false;
         do {
             do {
+                noChange();
                 System.out.println("Nhập username của bạn (5 đến 18 kí tự)");
                 username = scanner.nextLine();
-                if (username.equals("exit")) {
+                if (username.equals("0")) {
                     checkUserName = true;
                     menu.login();
                 }
                 checkValid = ValidateUtils.isUserName(username);
                 if (!checkValid) {
-                    System.out.println("UserName không hợp lệ vui lòng nhập lại!");
+                    System.out.println("UserName không hợp lệ, vui lòng nhập lại!");
                 }
             } while (!checkValid);
             boolean checkUserNameAvailable = userService.checkUserName(username);
@@ -330,16 +342,15 @@ public class LoginView {
     public void editFullName() throws IOException {
         List<User> users = userService.getAllUserUse();
         List<User> userList = userService.getAllUser();
-        System.out.println("Nhập họ và tên mới của bạn:");
-
         String fullName = null;
         boolean checkValid = false;
         boolean checkFullName = false;
         do {
             do {
-                System.out.println("Nhập họ và tên:");
+                noChange();
+                System.out.println("Nhập họ và tên mới của bạn:");
                 fullName = scanner.nextLine();
-                if (fullName.equals("exit")) {
+                if (fullName.equals("0")) {
                     checkFullName = true;
                     menu.login();
                 }
@@ -371,9 +382,10 @@ public class LoginView {
         String passwordNew1 = null;
         boolean checkPassword = false;
         do {
+            noChange();
             System.out.println("Nhập password hiện tại của bạn:");
             password = scanner.nextLine();
-            if (password.equals("exit")) {
+            if (password.equals("0")) {
                 checkPassword = true;
                 menu.menuLogin();
             }
@@ -411,9 +423,10 @@ public class LoginView {
         boolean checkPhoneNumber = false;
         do {
             do {
+                noChange();
                 System.out.println("Nhập số điện thoại mới của bạn:");
                 phoneNumber = scanner.nextLine();
-                if (phoneNumber.equals("exit")) {
+                if (phoneNumber.equals("0")) {
                     checkPhoneNumber = true;
                     menu.menuLogin();
                 }
@@ -449,9 +462,10 @@ public class LoginView {
         boolean checkEmail = true;
         do {
             do {
+                noChange();
                 System.out.println("Nhập Email của bạn:");
                 email = scanner.nextLine();
-                if (email.equals("exit")) {
+                if (email.equals("0")) {
                     checkEmail = false;
                     menu.menuLogin();
                 }
@@ -479,9 +493,10 @@ public class LoginView {
     public void editAddress() throws IOException {
         List<User> users = userService.getAllUserUse();
         List<User> userList = userService.getAllUser();
+        noChange();
         System.out.println("Nhập Email của bạn:");
         String inputAddress = scanner.nextLine();
-        if (inputAddress.equals("exit")) {
+        if (inputAddress.equals("0")) {
             menu.menuLogin();
         }
         String address = ValidateUtils.parseCommaToChar(inputAddress);
@@ -507,16 +522,20 @@ public class LoginView {
 
     public void showInfoCustomer() throws IOException {
         List<User> users = userService.getCustomerList();
-        System.out.println("            ╔═══════╦═══════════════╦═════════════════════╦════════════════╦════════════════╦═══════════════╦════════════════╦═════════════════════════════════════╦═══════════════════════════════╗");
-        System.out.printf("            ║%7s║%-15s║ %-20s║ %-15s║ %-15s║%-15s║ %-15s║ %-36s║ %-30s║", "ID", "USERNAME", "FULLNAME", "PHONE NUMBER", "GENDER", "CCCD", "BIRTHDAY", "EMAIL", "ADDRESS").println();
-        System.out.println("            ╠═══════╬═══════════════╬═════════════════════╬════════════════╬════════════════╬═══════════════╬════════════════╬═════════════════════════════════════╬═══════════════════════════════╣");
-        for (User user : users){
-            System.out.printf(user.userView()).println();
+        if(users.isEmpty()) {
+            System.out.println("Hiện tại chưa có khách hàng nào đăng kí!");
+        }else {
+            System.out.println("            ╔═══════╦═══════════════╦═════════════════════╦════════════════╦════════════════╦═══════════════╦════════════════╦═════════════════════════════════════╦═══════════════════════════════╗");
+            System.out.printf("            ║%7s║%-15s║ %-20s║ %-15s║ %-15s║%-15s║ %-15s║ %-36s║ %-30s║", "ID", "USERNAME", "FULLNAME", "PHONE NUMBER", "GENDER", "CCCD", "BIRTHDAY", "EMAIL", "ADDRESS").println();
+            System.out.println("            ╠═══════╬═══════════════╬═════════════════════╬════════════════╬════════════════╬═══════════════╬════════════════╬═════════════════════════════════════╬═══════════════════════════════╣");
+            for (User user : users){
+                System.out.printf(user.userView()).println();
+            }
+            System.out.println("            ╚═══════╩═══════════════╩═════════════════════╩════════════════╩════════════════╩═══════════════╩════════════════╩═════════════════════════════════════╩═══════════════════════════════╝");
         }
-        System.out.println("            ╚═══════╩═══════════════╩═════════════════════╩════════════════╩════════════════╩═══════════════╩════════════════╩═════════════════════════════════════╩═══════════════════════════════╝");
     }
     public void noChange() {
-        System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: exit ⦿ ");
+        System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: 0 ⦿ ");
     }
 
 }

@@ -1,17 +1,16 @@
 package service;
 
 import model.Order;
-import repository.ISearch;
 import repository.OrderAllRepository;
 import repository.OrderRepository;
 
 import java.io.IOException;
 import java.util.List;
 
-public class OderService {
+public class OrderService {
     private OrderRepository orderRepository;
     private OrderAllRepository orderAllRepository;
-    public OderService() {
+    public OrderService() {
         orderRepository = new OrderRepository();
         orderAllRepository = new OrderAllRepository();
     }

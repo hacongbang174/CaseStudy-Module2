@@ -3,7 +3,6 @@ package model;
 import repository.IModel;
 import utils.CurrencyFormat;
 import utils.DateFormat;
-import utils.ValidateUtils;
 
 import java.util.Date;
 
@@ -33,7 +32,7 @@ public class Order implements IModel<Order> {
         this.status = status;
     }
 
-    public int getIdOder() {
+    public int getIdOrder() {
         return idOder;
     }
 

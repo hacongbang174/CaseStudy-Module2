@@ -49,11 +49,20 @@ public class ValidateUtils {
         }
         return false;
     }
-    public static boolean isQuantity(int quantity) {
-        if(quantity > 0 && quantity <= 1000) {
-            return true;
+    public static boolean isQuantity(int quantity, String inputQuantity) {
+        try {
+            quantity = Integer.parseInt(inputQuantity);
+        } catch (NumberFormatException numberFormatException) {
+            System.out.println("Nhập lỗi, số lượng phải là một số, vui lòng nhập lại!");
+            quantity = 0;
+            return false;
         }
-        return false;
+        if(quantity <= 0 && quantity > 1000) {
+            System.out.println("Số lượng phải lớn hơn 0 và nhỏ hơn 1000, vui lòng nhập lại! Số lượng từ 1-1000");
+            quantity = 0;
+            return false;
+        }
+        return true;
     }
     public static String parseCommaToChar(String s) {
         String s1 = s.replaceAll(",", "!");
@@ -63,5 +72,19 @@ public class ValidateUtils {
         String s1 = s.replaceAll("!", ",");
         return s1;
     }
-
+    public static boolean isId (int id, String input) {
+        try {
+            id = Integer.parseInt(input);
+        } catch (NumberFormatException numberFormatException) {
+            System.out.println("ID không hợp lệ vui lòng nhập lại!");
+            id = 0;
+            return false;
+        }
+        if(id < 0) {
+            System.out.println("ID phải lớn hơn 0, vui lòng nhập lại!");
+            id = 0;
+            return false;
+        }
+        return true;
+    }
 }

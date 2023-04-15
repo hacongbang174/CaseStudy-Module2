@@ -6,7 +6,7 @@ import model.Order;
 import model.User;
 import service.FileService;
 import service.FoodService;
-import service.OderService;
+import service.OrderService;
 import service.UserService;
 import utils.DateFormat;
 import utils.SortOderById;
@@ -23,14 +23,14 @@ public class OrderView {
     private final String FILE_PATH_ODERALL = "./src/main/data/orderAll.csv";
     private FoodService foodService;
     private UserService userService;
-    private OderService oderService;
+    private OrderService orderService;
     private FileService fileService;
     private Scanner scanner;
 
     public OrderView() {
         foodService = new FoodService();
         userService = new UserService();
-        oderService = new OderService();
+        orderService = new OrderService();
         fileService = new FileService();
         scanner = new Scanner(System.in);
     }
@@ -42,28 +42,26 @@ public class OrderView {
         foodView.showFoodList();
         List<Food> foods = foodService.getAllFood();
         List<User> users = userService.getAllUserUse();
-        List<Order> orderAll = oderService.getAllOderAll();
-        List<Order> orders = oderService.getAllOder();
+        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orders = orderService.getAllOder();
         orderAll.sort(new SortOderById());
         Order order = new Order();
         Order orderNew = new Order();
-        noChange();
         int idFood = 0;
         String nameFood = null;
         boolean checkId = false;
         do {
+            noChange();
             boolean checkAction = false;
             System.out.println("Nhập ID đồ uống, thức ăn bạn muốn oder:");
             String inputID = scanner.nextLine();
-            if (inputID.equals("exit")) {
+            if (inputID.equals("0")) {
                 checkId = true;
                 customerView.launcher();
             }
-            try {
+            if (ValidateUtils.isId(idFood,inputID)) {
                 idFood = Integer.parseInt(inputID);
-            } catch (NumberFormatException numberFormatException) {
-                System.out.println("ID không hợp lệ vui lòng nhập lại!");
-                idFood = 0;
+            }else {
                 continue;
             }
             int checkIdFood = foodService.checkIdFood(idFood);
@@ -83,30 +81,24 @@ public class OrderView {
                                 boolean checkValid = false;
                                 boolean checkQuantity = false;
                                 do {
+                                    noChange();
                                     System.out.println("Nhập số lượng:");
                                     String inputQuantity = scanner.nextLine();
-                                    if (inputQuantity.equals("exit")) {
+                                    if (inputQuantity.equals("0")) {
                                         checkId = true;
                                         customerView.launcher();
                                     }
-                                    try {
-                                        quantity = Integer.parseInt(inputQuantity);
-                                    } catch (NumberFormatException numberFormatException) {
-                                        System.out.println("Nhập lỗi, vui lòng nhập lại! Số lượng từ 0-1000");
-                                        quantity = 0;
-                                        continue;
-                                    }
-                                    checkValid = ValidateUtils.isQuantity(quantity);
+                                    checkValid = ValidateUtils.isQuantity(quantity,inputQuantity);
                                     if (!checkValid) {
-                                        System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
                                         checkQuantity = false;
                                     } else {
+                                        quantity = Integer.parseInt(inputQuantity);
                                         for (int j = 0; j < foods.size(); j++) {
                                             if (foods.get(j).getNameFood().equals(nameFood)) {
                                                 if (quantity <= foods.get(j).getQuantity()) {
                                                     checkQuantity = true;
                                                 } else {
-                                                    System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại!");
+                                                    System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + foods.get(j).getQuantity());
                                                     checkQuantity = false;
                                                 }
                                             }
@@ -115,7 +107,7 @@ public class OrderView {
                                 } while (!checkQuantity);
                                 int quantityNew = orders.get(i).getQuantityFood() + quantity;
                                 double total = orders.get(i).getPriceFood() * quantityNew;
-                                order.setIdOder(orders.get(i).getIdOder());
+                                order.setIdOder(orders.get(i).getIdOrder());
                                 order.setIdCustomer(orders.get(i).getIdCustomer());
                                 order.setNameCustomer(orders.get(i).getNameCustomer());
                                 order.setNameFood(nameFood);
@@ -139,37 +131,29 @@ public class OrderView {
                                     }
                                 }
                                 break;
-                            }
-                            else if (orders.get(i).getNameFood().equals(nameFood) && users.get(0).getId() != orders.get(i).getIdCustomer()) {
-                                noChange();
+                            } else if (orders.get(i).getNameFood().equals(nameFood) && users.get(0).getId() != orders.get(i).getIdCustomer()) {
                                 int quantity = 0;
                                 boolean checkValid = false;
                                 boolean checkQuantity = false;
                                 do {
+                                    noChange();
                                     System.out.println("Nhập số lượng:");
                                     String inputQuantity = scanner.nextLine();
-                                    if (inputQuantity.equals("exit")) {
+                                    if (inputQuantity.equals("0")) {
                                         checkId = true;
                                         customerView.launcher();
                                     }
-                                    try {
-                                        quantity = Integer.parseInt(inputQuantity);
-                                    } catch (NumberFormatException numberFormatException) {
-                                        System.out.println("Nhập lỗi, vui lòng nhập lại! Số lượng từ 0-1000");
-                                        quantity = 0;
-                                        continue;
-                                    }
-                                    checkValid = ValidateUtils.isQuantity(quantity);
+                                    checkValid = ValidateUtils.isQuantity(quantity,inputQuantity);
                                     if (!checkValid) {
-                                        System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
                                         checkQuantity = false;
                                     } else {
+                                        quantity = Integer.parseInt(inputQuantity);
                                         for (int j = 0; j < foods.size(); j++) {
                                             if (foods.get(j).getIdFood() == idFood) {
                                                 if (quantity <= foods.get(j).getQuantity()) {
                                                     checkQuantity = true;
                                                 } else {
-                                                    System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại!");
+                                                    System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + foods.get(j).getQuantity());
                                                     checkQuantity = false;
                                                 }
                                             }
@@ -184,7 +168,7 @@ public class OrderView {
                                     }
                                 }
                                 double totalMoney = quantity * price;
-                                order.setIdOder(orders.get(orders.size() - 1).getIdOder() + 1);
+                                order.setIdOder(orders.get(orders.size() - 1).getIdOrder() + 1);
                                 order.setIdCustomer(users.get(0).getId());
                                 order.setNameCustomer(users.get(0).getFullName());
                                 order.setNameFood(nameFood);
@@ -197,37 +181,29 @@ public class OrderView {
                                 fileService.writeData(FILE_PATH_ORDER, orders);
                                 fileService.writeData(FILE_PATH_FOOD, foods);
                                 break;
-                            }
-                            else if (!orders.get(i).getNameFood().equals(nameFood) && users.get(0).getId() == orders.get(i).getIdCustomer()) {
-                                noChange();
+                            } else if (!orders.get(i).getNameFood().equals(nameFood) && users.get(0).getId() == orders.get(i).getIdCustomer()) {
                                 int quantity = 0;
                                 boolean checkValid = false;
                                 boolean checkQuantity = false;
                                 do {
+                                    noChange();
                                     System.out.println("Nhập số lượng:");
                                     String inputQuantity = scanner.nextLine();
-                                    if (inputQuantity.equals("exit")) {
+                                    if (inputQuantity.equals("0")) {
                                         checkId = true;
                                         customerView.launcher();
                                     }
-                                    try {
-                                        quantity = Integer.parseInt(inputQuantity);
-                                    } catch (NumberFormatException numberFormatException) {
-                                        System.out.println("Nhập lỗi, vui lòng nhập lại! Số lượng từ 0-1000");
-                                        quantity = 0;
-                                        continue;
-                                    }
-                                    checkValid = ValidateUtils.isQuantity(quantity);
+                                    checkValid = ValidateUtils.isQuantity(quantity,inputQuantity);
                                     if (!checkValid) {
-                                        System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
                                         checkQuantity = false;
                                     } else {
+                                        quantity = Integer.parseInt(inputQuantity);
                                         for (int j = 0; j < foods.size(); j++) {
                                             if (foods.get(j).getIdFood() == idFood) {
                                                 if (quantity <= foods.get(j).getQuantity()) {
                                                     checkQuantity = true;
                                                 } else {
-                                                    System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại!");
+                                                    System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + foods.get(j).getQuantity());
                                                     checkQuantity = false;
                                                 }
                                             }
@@ -242,7 +218,7 @@ public class OrderView {
                                     }
                                 }
                                 double totalMoney = quantity * price;
-                                order.setIdOder(orders.get(orders.size() - 1).getIdOder() + 1);
+                                order.setIdOder(orders.get(orders.size() - 1).getIdOrder() + 1);
                                 order.setIdCustomer(users.get(0).getId());
                                 order.setNameCustomer(users.get(0).getFullName());
                                 order.setNameFood(nameFood);
@@ -255,37 +231,29 @@ public class OrderView {
                                 fileService.writeData(FILE_PATH_ORDER, orders);
                                 fileService.writeData(FILE_PATH_FOOD, foods);
                                 break;
-                            }
-                            else if (!orders.get(i).getNameFood().equals(nameFood) && users.get(0).getId() != orders.get(i).getIdCustomer()) {
-                                noChange();
+                            } else if (!orders.get(i).getNameFood().equals(nameFood) && users.get(0).getId() != orders.get(i).getIdCustomer()) {
                                 int quantity = 0;
                                 boolean checkValid = false;
                                 boolean checkQuantity = false;
                                 do {
+                                    noChange();
                                     System.out.println("Nhập số lượng:");
                                     String inputQuantity = scanner.nextLine();
-                                    if (inputQuantity.equals("exit")) {
+                                    if (inputQuantity.equals("0")) {
                                         checkId = true;
                                         customerView.launcher();
                                     }
-                                    try {
-                                        quantity = Integer.parseInt(inputQuantity);
-                                    } catch (NumberFormatException numberFormatException) {
-                                        System.out.println("Nhập lỗi, vui lòng nhập lại! Số lượng từ 0-1000");
-                                        quantity = 0;
-                                        continue;
-                                    }
-                                    checkValid = ValidateUtils.isQuantity(quantity);
+                                    checkValid = ValidateUtils.isQuantity(quantity,inputQuantity);
                                     if (!checkValid) {
-                                        System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
                                         checkQuantity = false;
                                     } else {
+                                        quantity = Integer.parseInt(inputQuantity);
                                         for (int j = 0; j < foods.size(); j++) {
                                             if (foods.get(j).getIdFood() == idFood) {
                                                 if (quantity <= foods.get(j).getQuantity()) {
                                                     checkQuantity = true;
                                                 } else {
-                                                    System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại!");
+                                                    System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + foods.get(j).getQuantity());
                                                     checkQuantity = false;
                                                 }
                                             }
@@ -300,7 +268,7 @@ public class OrderView {
                                     }
                                 }
                                 double totalMoney = quantity * price;
-                                order.setIdOder(orders.get(orders.size() - 1).getIdOder() + 1);
+                                order.setIdOder(orders.get(orders.size() - 1).getIdOrder() + 1);
                                 order.setIdCustomer(users.get(0).getId());
                                 order.setNameCustomer(users.get(0).getFullName());
                                 order.setNameFood(nameFood);
@@ -316,35 +284,29 @@ public class OrderView {
                             }
                         }
                     } else if (orders.isEmpty()) {
-                        noChange();
+
                         int quantity = 0;
                         boolean checkValid = false;
                         boolean checkQuantity = false;
                         do {
+                            noChange();
                             System.out.println("Nhập số lượng:");
                             String inputQuantity = scanner.nextLine();
                             if (inputQuantity.equals("exit")) {
                                 checkId = true;
                                 customerView.launcher();
                             }
-                            try {
-                                quantity = Integer.parseInt(inputQuantity);
-                            } catch (NumberFormatException numberFormatException) {
-                                System.out.println("Nhập lỗi, vui lòng nhập lại! Số lượng từ 0-1000");
-                                quantity = 0;
-                                continue;
-                            }
-                            checkValid = ValidateUtils.isQuantity(quantity);
+                            checkValid = ValidateUtils.isQuantity(quantity,inputQuantity);
                             if (!checkValid) {
-                                System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
                                 checkQuantity = false;
                             } else {
+                                quantity = Integer.parseInt(inputQuantity);
                                 for (int j = 0; j < foods.size(); j++) {
                                     if (foods.get(j).getIdFood() == idFood) {
                                         if (quantity <= foods.get(j).getQuantity()) {
                                             checkQuantity = true;
                                         } else {
-                                            System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại!");
+                                            System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + foods.get(j).getQuantity());
                                             checkQuantity = false;
                                         }
                                     }
@@ -380,7 +342,7 @@ public class OrderView {
                     break;
             }
         } while (!checkId);
-        orderNew.setIdOder(orderAll.get(orderAll.size() - 1).getIdOder() + 1);
+        orderNew.setIdOder(orderAll.get(orderAll.size() - 1).getIdOrder() + 1);
         orderNew.setIdCustomer(order.getIdCustomer());
         orderNew.setNameCustomer(order.getNameCustomer());
         orderNew.setNameFood(order.getNameFood());
@@ -399,12 +361,12 @@ public class OrderView {
 
         CustomerView customerView = new CustomerView();
         List<Food> foods = foodService.getAllFood();
-        List<Order> orderAll = oderService.getAllOderAll();
-        List<Order> orders = oderService.getAllOder();
+        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orders = orderService.getAllOder();
         List<User> users = userService.getAllUserUse();
         int count = 0;
         for (int i = 0; i < orders.size(); i++) {
-            if(orders.get(i).getIdCustomer() == users.get(0).getId()) {
+            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
                 count += 1;
             }
         }
@@ -412,14 +374,14 @@ public class OrderView {
             System.out.println("Bạn chưa có món, mời bạn thêm món để thực hiện chức năng này!");
             boolean checkEdit = false;
             do {
-                System.out.println("Nhập \"Y\" để thêm món hoăc \"exit\" để quay lại! ");
+                System.out.println("Nhập \"Y\" để thêm món hoăc \"0\" để quay lại! ");
                 String input = scanner.nextLine();
                 switch (input.toUpperCase()) {
                     case "Y":
                         checkEdit = true;
                         addFoodInOderByIdCustomer();
                         break;
-                    case "EXIT" :
+                    case "0":
                         checkEdit = true;
                         customerView.launcher();
                         break;
@@ -427,32 +389,31 @@ public class OrderView {
                         checkEdit = false;
                         break;
                 }
-            }while (!checkEdit);
-        }else {
+            } while (!checkEdit);
+        } else {
             showOderNow();
-            int idOder = 0;
+            int idOrder = 0;
             String nameFood = null;
             boolean checkId = false;
             do {
+                noChange();
                 boolean checkAction = false;
                 System.out.println("Nhập ID oder bạn muốn chỉnh sửa:");
                 String inputID = scanner.nextLine();
-                if (inputID.equals("exit")) {
+                if (inputID.equals("0")) {
                     checkId = true;
                     customerView.launcher();
                 }
-                try {
-                    idOder = Integer.parseInt(inputID);
-                } catch (NumberFormatException numberFormatException) {
-                    System.out.println("ID không hợp lệ vui lòng nhập lại!");
-                    idOder = 0;
+                if (ValidateUtils.isId(idOrder,inputID)) {
+                    idOrder = Integer.parseInt(inputID);
+                }else {
                     continue;
                 }
-                int checkIdOder = foodService.checkIdFood(idOder);
-                switch (checkIdOder) {
+                int checkIdOrder = foodService.checkIdFood(idOrder);
+                switch (checkIdOrder) {
                     case 1:
                         for (int i = 0; i < orders.size(); i++) {
-                            if (orders.get(i).getIdOder() == idOder) {
+                            if (orders.get(i).getIdOrder() == idOrder) {
                                 nameFood = orders.get(i).getNameFood();
                             }
                         }
@@ -461,27 +422,18 @@ public class OrderView {
                         boolean checkValid = false;
                         boolean checkQuantity = false;
                         do {
-                            System.out.println("Nhập số lượng bạn muốn sửa:");
+                            System.out.println("Nhập số lượng bạn muốn sửa: Số lượng từ 1-1000");
                             String inputQuantity = scanner.nextLine();
-                            if (inputQuantity.equals("exit")) {
+                            if (inputQuantity.equals("0")) {
                                 checkId = true;
                                 customerView.launcher();
                             }
-                            try {
+                            checkValid = ValidateUtils.isQuantity(quantity,inputQuantity);
+                            if (checkValid) {
                                 quantity = Integer.parseInt(inputQuantity);
-                            } catch (NumberFormatException numberFormatException) {
-                                System.out.println("Nhập lỗi, vui lòng nhập lại! Số lượng từ 0-1000");
-                                quantity = 0;
-                                continue;
-                            }
-                            checkValid = ValidateUtils.isQuantity(quantity);
-                            if (!checkValid) {
-                                System.out.println("Số lượng không hợp lệ vui lòng nhập lại! Số lượng từ 0-1000");
-                                checkQuantity = false;
-                            } else {
                                 for (int i = 0; i < orders.size(); i++) {
                                     for (int j = 0; j < foods.size(); j++) {
-                                        if (foods.get(j).getNameFood().equals(nameFood) && orders.get(i).getIdOder() == idOder) {
+                                        if (foods.get(j).getNameFood().equals(nameFood) && orders.get(i).getIdOrder() == idOrder) {
                                             if (orders.get(i).getQuantityFood() <= quantity && quantity <= foods.get(j).getQuantity()) {
                                                 orders.get(i).setQuantityFood(quantity);
                                                 foods.get(i).setQuantity(foods.get(i).getQuantity() + orders.get(i).getQuantityFood() - quantity);
@@ -497,6 +449,9 @@ public class OrderView {
                                         }
                                     }
                                 }
+                            }
+                            else {
+                                checkQuantity = false;
                             }
                         } while (!checkQuantity);
 
@@ -517,7 +472,7 @@ public class OrderView {
             fileService.writeData(FILE_PATH_ORDER, orders);
             fileService.writeData(FILE_PATH_ODERALL, orderAll);
             fileService.writeData(FILE_PATH_FOOD, foods);
-            showOderNow();
+//            showOderNow();
             System.out.println("✔ Bạn đã cập nhật số lượng thành công ✔\n");
         }
 
@@ -526,12 +481,12 @@ public class OrderView {
     public void deleteFoodOutOderByIdOder() throws IOException {
         CustomerView customerView = new CustomerView();
         List<Food> foods = foodService.getAllFood();
-        List<Order> orderAll = oderService.getAllOderAll();
-        List<Order> orders = oderService.getAllOder();
+        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orders = orderService.getAllOder();
         List<User> users = userService.getAllUserUse();
         int count = 0;
         for (int i = 0; i < orders.size(); i++) {
-            if(orders.get(i).getIdCustomer() == users.get(0).getId()) {
+            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
                 count += 1;
             }
         }
@@ -539,14 +494,14 @@ public class OrderView {
             System.out.println("Bạn chưa có món, mời bạn thêm món để thực hiện chức năng này!");
             boolean checkEdit = false;
             do {
-                System.out.println("Nhập \"Y\" để thêm món hoăc \"exit\" để quay lại! ");
+                System.out.println("Nhập \"Y\" để thêm món hoăc \"0\" để quay lại! ");
                 String input = scanner.nextLine();
                 switch (input.toUpperCase()) {
                     case "Y":
                         checkEdit = true;
                         addFoodInOderByIdCustomer();
                         break;
-                    case "EXIT" :
+                    case "0":
                         checkEdit = true;
                         customerView.launcher();
                         break;
@@ -554,43 +509,42 @@ public class OrderView {
                         checkEdit = false;
                         break;
                 }
-            }while (!checkEdit);
-        }else {
+            } while (!checkEdit);
+        } else {
             showOderNow();
-            int idOder = 0;
+            int idOrder = 0;
             int idOderAll = 0;
             String nameFood = null;
             boolean checkId = false;
             do {
+                noChange();
                 boolean checkAction = false;
                 System.out.println("Nhập ID oder bạn muốn xóa:");
                 String inputID = scanner.nextLine();
-                if (inputID.equals("exit")) {
+                if (inputID.equals("0")) {
                     checkId = true;
                     customerView.launcher();
                 }
-                try {
-                    idOder = Integer.parseInt(inputID);
-                } catch (NumberFormatException numberFormatException) {
-                    System.out.println("ID không hợp lệ vui lòng nhập lại!");
-                    idOder = 0;
+                if (ValidateUtils.isId(idOrder,inputID)) {
+                    idOrder = Integer.parseInt(inputID);
+                }else {
                     continue;
                 }
-                int checkIdOder = foodService.checkIdFood(idOder);
-                switch (checkIdOder) {
+                int checkIdOrder = foodService.checkIdFood(idOrder);
+                switch (checkIdOrder) {
                     case 1:
-                        oderService.deleteFoodOutOderById(idOder);
+                        orderService.deleteFoodOutOderById(idOrder);
                         for (int i = 0; i < orders.size(); i++) {
-                            if (orders.get(i).getIdOder() == idOder) {
+                            if (orders.get(i).getIdOrder() == idOrder) {
                                 nameFood = orders.get(i).getNameFood();
                             }
                         }
                         for (int i = 0; i < orderAll.size(); i++) {
                             if (orderAll.get(i).getNameFood().equals(nameFood) && orderAll.get(i).getIdCustomer() == users.get(0).getId()) {
-                                idOderAll = orderAll.get(i).getIdOder();
+                                idOderAll = orderAll.get(i).getIdOrder();
                             }
                         }
-                        oderService.deleteFoodOutOderAllById(idOderAll);
+                        orderService.deleteFoodOutOderAllById(idOderAll);
                         checkId = true;
                         break;
                     case -1:
@@ -599,13 +553,53 @@ public class OrderView {
                         break;
                 }
             } while (!checkId);
-            showOderNow();
+//            showOderNow();
             System.out.println("✔ Bạn đã xóa món thành công ✔\n");
         }
     }
+    public void findOderById() throws IOException {
+        AdminView adminView = new AdminView();
+        List<Order> orderAll = orderService.getAllOderAll();
+        noChange();
+        int idOrder = 0;
+        boolean checkIdOrder = false;
+        do {
+            System.out.println("Nhập ID order, thức ăn bạn muốn tìm");
+            String input = scanner.nextLine();
+            if (input.equals("0")) {
+                checkIdOrder = true;
+                adminView.launcherOder();
+            }
+            if (ValidateUtils.isId(idOrder,input)) {
+                idOrder = Integer.parseInt(input);
+            }else {
+                continue;
+            }
+            int select = orderService.checkIdOderAll(idOrder);
+            switch (select) {
+                case 1:
+                    System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
+                    System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
+                    System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+                    for (int i = 0; i < orderAll.size(); i++) {
+                        if (orderAll.get(i).getIdOrder() == idOrder) {
+                            System.out.printf(orderAll.get(i).oderView()).println();
+                        }
+                    }
+                    System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+                    checkIdOrder = true;
+                    break;
+                case -1:
+                    System.out.println("ID không tìm thấy, vui lòng nhập lại!");
+                    checkIdOrder = false;
+                    break;
+            }
+        } while (!checkIdOrder);
+
+    }
 
     public void showOderNow() throws IOException {
-        List<Order> orders = oderService.getAllOder();
+        List<Order> orders = orderService.getAllOder();
         List<User> users = userService.getAllUserUse();
         System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
         System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
@@ -620,68 +614,132 @@ public class OrderView {
     }
 
     public void showHistoryOder() throws IOException {
-        List<Order> orders = oderService.getAllOder();
+        CustomerView customerView = new CustomerView();
+        List<Order> orders = orderService.getAllOder();
         List<User> users = userService.getAllUserUse();
-        System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-        System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-        System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+        int count = 0;
         for (int i = 0; i < orders.size(); i++) {
             if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
-                System.out.printf(orders.get(i).oderView()).println();
+                count += 1;
             }
         }
-        System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+        if (count == 0) {
+            System.out.println("Chưa có đơn hàng, mời bạn thêm món để thực hiện chức năng này!");
+            boolean checkEdit = false;
+            do {
+                System.out.println("Nhập \"Y\" để thêm món hoăc \"exit\" để quay lại! ");
+                String input = scanner.nextLine();
+                switch (input.toUpperCase()) {
+                    case "Y":
+                        checkEdit = true;
+                        addFoodInOderByIdCustomer();
+                        break;
+                    case "0":
+                        checkEdit = true;
+                        customerView.launcher();
+                        break;
+                    default:
+                        checkEdit = false;
+                        break;
+                }
+            } while (!checkEdit);
+        }else {
+            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
+            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
+            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            for (int i = 0; i < orders.size(); i++) {
+                if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
+                    System.out.printf(orders.get(i).oderView()).println();
+                }
+            }
+            System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+        }
     }
+
     public void showHistoryOderPaid() throws IOException {
-        List<Order> orderAll = oderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOderAll();
         List<User> users = userService.getAllUserUse();
-        System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-        System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-        System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+        int count = 0;
         for (int i = 0; i < orderAll.size(); i++) {
             if (orderAll.get(i).getIdCustomer() == users.get(0).getId() && orderAll.get(i).getStatus().equals(EStatus.PAID)) {
-                System.out.printf(orderAll.get(i).oderView()).println();
+                count += 1;
             }
         }
-        System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+        if(count == 0) {
+            System.out.println("Bạn chưa có đơn hàng nào đã thanh toán. Không thể xem lịch sử mua hàng!");
+        }else {
+            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
+            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
+            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            for (int i = 0; i < orderAll.size(); i++) {
+                if (orderAll.get(i).getIdCustomer() == users.get(0).getId() && orderAll.get(i).getStatus().equals(EStatus.PAID)) {
+                    System.out.printf(orderAll.get(i).oderView()).println();
+                }
+            }
+            System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+        }
     }
 
     public void payOder() throws IOException {
         FileService fileService = new FileService();
-        List<Order> orders = oderService.getAllOder();
-        List<Order> orderAll = oderService.getAllOderAll();
+        CustomerView customerView = new CustomerView();
+        List<Order> orders = orderService.getAllOder();
+        List<Order> orderAll = orderService.getAllOderAll();
         List<User> users = userService.getAllUserUse();
         double totalMoney = 0;
-//        for (int i = 0; i < orders.size(); i++) {
-//            if(orders.get(i).getIdCustomer() == users.get(i).getId()) {
-//                totalMoney += orders.get(i).getTotalMoney();
-//            }
-//        }
-        System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-        System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-        System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+        int count = 0;
         for (int i = 0; i < orders.size(); i++) {
-            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
-                totalMoney += orders.get(i).getTotalMoney();
-                orders.get(i).setStatus(EStatus.PAID);
-                System.out.printf(orders.get(i).oderView()).println();
+            if (orders.get(i).getIdCustomer() == users.get(i).getId()) {
+                count += 1;
+            }
+        }
+        if (count == 0) {
+            System.out.println("Bạn chưa có món, mời bạn thêm món để thực hiện chức năng này!");
+            boolean checkEdit = false;
+            do {
+                System.out.println("Nhập \"Y\" để thêm món hoăc \"0\" để quay lại! ");
+                String input = scanner.nextLine();
+                switch (input.toUpperCase()) {
+                    case "Y":
+                        checkEdit = true;
+                        addFoodInOderByIdCustomer();
+                        break;
+                    case "0":
+                        checkEdit = true;
+                        customerView.launcher();
+                        break;
+                    default:
+                        checkEdit = false;
+                        break;
+                }
+            } while (!checkEdit);
+        } else {
+            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
+            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
+            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            for (int i = 0; i < orders.size(); i++) {
+                if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
+                    totalMoney += orders.get(i).getTotalMoney();
+                    orders.get(i).setStatus(EStatus.PAID);
+                    System.out.printf(orders.get(i).oderView()).println();
 
+                }
+            }
+            System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
+            System.out.printf("            ║                                                TỔNG TIỀN CẦN THANH TOÁN                                                ║ %-13s ║                                                ║", totalMoney).println();
+            System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
+            for (int i = 0; i < orderAll.size(); i++) {
+                if (orderAll.get(i).getIdCustomer() == users.get(0).getId()) {
+                    orderAll.get(i).setStatus(EStatus.PAID);
+                }
+            }
+            for (int i = 0; i < orders.size(); i++) {
+                if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
+                    orders.remove(i);
+                }
             }
         }
-        System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-        System.out.printf("            ║                                                TỔNG TIỀN CẦN THANH TOÁN                                                ║ %-13s ║                                                ║", totalMoney).println();
-        System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
-        for (int i = 0; i < orderAll.size(); i++) {
-            if (orderAll.get(i).getIdCustomer() == users.get(0).getId()) {
-                orderAll.get(i).setStatus(EStatus.PAID);
-            }
-        }
-        for (int i = 0; i < orders.size(); i++) {
-            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
-                orders.remove(i);
-            }
-        }
-        fileService.writeData(FILE_PATH_ORDER,orders);
+        fileService.writeData(FILE_PATH_ORDER, orders);
         fileService.writeData(FILE_PATH_ODERALL, orderAll);
         System.out.println("✔ Bạn đã thanh toán thành công ✔\n");
     }
@@ -689,16 +747,16 @@ public class OrderView {
     public void showRevenueByDay() throws IOException {
         AdminView adminView = new AdminView();
         noChange();
-        List<Order> orderAll = oderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOderAll();
         if (orderAll.isEmpty()) {
-            System.out.println("Không có đơn hàng, không có doanh thu!");
+            System.out.println("Doanh thu hiện tại không có!");
         } else {
             String date = null;
             boolean checkDate = false;
             do {
                 System.out.println("Nhập ngày tháng năm bạn muốn xem doanh thu: dd-MM-yyyy");
                 date = scanner.nextLine();
-                if (date.equals("exit")) {
+                if (date.equals("0")) {
                     checkDate = true;
                     adminView.launcherRevenue();
                 }
@@ -707,35 +765,45 @@ public class OrderView {
                     System.out.println("Ngày tháng năm bạn nhập không hợp lệ, vui lòng nhập lại: dd-MM-yyyy");
                 }
             } while (!checkDate);
-            double totalRevenueByDay = 0;
-            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            int count = 0;
             for (int i = 0; i < orderAll.size(); i++) {
                 if (DateFormat.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(date) && orderAll.get(i).getStatus().equals(EStatus.PAID)) {
-                    totalRevenueByDay += orderAll.get(i).getTotalMoney();
-                    System.out.printf(orderAll.get(i).oderView()).println();
+                    count += 1;
                 }
             }
-            System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-            System.out.printf("            ║                                                  TỔNG DOANH THU THEO NGÀY                                              ║ %-13s ║                                                ║", totalRevenueByDay).println();
-            System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
+            if (count == 0) {
+                System.out.println("Ngày bạn muốn xem không có doanh thu!");
+            } else {
+                double totalRevenueByDay = 0;
+                System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
+                System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
+                System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+                for (int i = 0; i < orderAll.size(); i++) {
+                    if (DateFormat.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(date) && orderAll.get(i).getStatus().equals(EStatus.PAID)) {
+                        totalRevenueByDay += orderAll.get(i).getTotalMoney();
+                        System.out.printf(orderAll.get(i).oderView()).println();
+                    }
+                }
+                System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
+                System.out.printf("            ║                                                  TỔNG DOANH THU THEO NGÀY                                              ║ %-13s ║                                                ║", totalRevenueByDay).println();
+                System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
+            }
         }
     }
 
     public void showRevenueByMonth() throws IOException {
         AdminView adminView = new AdminView();
         noChange();
-        List<Order> orderAll = oderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOderAll();
         if (orderAll.isEmpty()) {
-            System.out.println("Không có đơn hàng, không có doanh thu!");
+            System.out.println("Doanh thu hiện tại không có!");
         } else {
             String month = null;
             boolean checkMonth = false;
             do {
                 System.out.println("Nhập tháng năm bạn muốn xem doanh thu: MM-yyyy");
                 month = scanner.nextLine();
-                if (month.equals("exit")) {
+                if (month.equals("0")) {
                     checkMonth = true;
                     adminView.launcherRevenue();
                 }
@@ -744,43 +812,57 @@ public class OrderView {
                     System.out.println("Tháng năm bạn nhập không hợp lệ, vui lòng nhập lại: MM-yyyy");
                 }
             } while (!checkMonth);
-            double totalRevenueByMonth = 0;
-            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            int count = 0;
             for (int i = 0; i < orderAll.size(); i++) {
                 if (DateFormat.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(month) && orderAll.get(i).getStatus().equals(EStatus.PAID)) {
-                    totalRevenueByMonth += orderAll.get(i).getTotalMoney();
-                    System.out.printf(orderAll.get(i).oderView()).println();
+                    count += 1;
                 }
             }
-            System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-            System.out.printf("            ║                                                  TỔNG DOANH THU THEO NGÀY                                              ║ %-13s ║                                                ║", totalRevenueByMonth).println();
-            System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
+            if (count == 0) {
+                System.out.println("Tháng bạn muốn xem không có doanh thu!");
+            } else {
+                double totalRevenueByMonth = 0;
+                System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
+                System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
+                System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+                for (int i = 0; i < orderAll.size(); i++) {
+                    if (DateFormat.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(month) && orderAll.get(i).getStatus().equals(EStatus.PAID)) {
+                        totalRevenueByMonth += orderAll.get(i).getTotalMoney();
+                        System.out.printf(orderAll.get(i).oderView()).println();
+                    }
+                }
+                System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
+                System.out.printf("            ║                                                  TỔNG DOANH THU THEO NGÀY                                              ║ %-13s ║                                                ║", totalRevenueByMonth).println();
+                System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
+            }
         }
     }
 
     public void showTotalRevenue() throws IOException {
-        List<Order> orderAll = oderService.getAllOderAll();
-        double totalRevenue = 0;
-        for (int i = 0; i < orderAll.size(); i++) {
-            totalRevenue += orderAll.get(i).getTotalMoney();
-        }
-        System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-        System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-        System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-        for (int i = 0; i < orderAll.size(); i++) {
-            if (orderAll.get(i).getStatus().equals(EStatus.PAID)) {
-                System.out.printf(orderAll.get(i).oderView()).println();
+        List<Order> orderAll = orderService.getAllOderAll();
+        if(orderAll.isEmpty()) {
+            System.out.println("Doanh thu hiện tại không có!");
+        }else {
+            double totalRevenue = 0;
+            for (int i = 0; i < orderAll.size(); i++) {
+                totalRevenue += orderAll.get(i).getTotalMoney();
             }
+            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
+            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
+            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            for (int i = 0; i < orderAll.size(); i++) {
+                if (orderAll.get(i).getStatus().equals(EStatus.PAID)) {
+                    System.out.printf(orderAll.get(i).oderView()).println();
+                }
+            }
+            System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
+            System.out.printf("            ║                                                            TỔNG DOANH THU                                              ║ %-13s ║                                                ║", totalRevenue).println();
+            System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
         }
-        System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-        System.out.printf("            ║                                                            TỔNG DOANH THU                                              ║ %-13s ║                                                ║", totalRevenue).println();
-        System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
     }
 
     public void showOderAll() throws IOException {
-        List<Order> orderAll = oderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOderAll();
         if (orderAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
@@ -795,7 +877,7 @@ public class OrderView {
     }
 
     public void showOderUnPaid() throws IOException {
-        List<Order> orderAll = oderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOderAll();
         if (orderAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
@@ -812,7 +894,7 @@ public class OrderView {
     }
 
     public void showOderPaid() throws IOException {
-        List<Order> orderAll = oderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOderAll();
         if (orderAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
@@ -828,51 +910,8 @@ public class OrderView {
         }
     }
 
-    public void findOderById() throws IOException {
-        AdminView adminView = new AdminView();
-        List<Order> orderAll = oderService.getAllOderAll();
-        noChange();
-        int idOrder = 0;
-        boolean checkIdOrder = false;
-        do {
-            System.out.println("Nhập ID order, thức ăn bạn muốn tìm");
-            String input = scanner.nextLine();
-            if (input.equals("exit")) {
-                checkIdOrder = true;
-                adminView.launcherOder();
-            }
-            try {
-                idOrder = Integer.parseInt(input);
-            } catch (NumberFormatException numberFormatException) {
-                System.out.println("ID không hợp lệ vui lòng nhập lại!");
-                idOrder = 0;
-                continue;
-            }
-            int select = oderService.checkIdOderAll(idOrder);
-            switch (select) {
-                case 1:
-                    System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-                    System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-                    System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-                    for (int i = 0; i < orderAll.size(); i++) {
-                        if (orderAll.get(i).getIdOder() == idOrder) {
-                            System.out.printf(orderAll.get(i).oderView()).println();
-                        }
-                    }
-                    System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
-                    checkIdOrder = true;
-                    break;
-                case -1:
-                    System.out.println("ID không tìm thấy, vui lòng nhập lại!");
-                    checkIdOrder = false;
-                    break;
-            }
-        } while (!checkIdOrder);
 
-    }
     public void noChange() {
-        System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: exit ⦿ ");
+        System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: \"0\" ⦿ ");
     }
-
-
 }
