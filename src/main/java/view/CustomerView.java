@@ -114,7 +114,7 @@ public class CustomerView {
                     checkAction = false;
                     break;
             }
-        }while (checkAction);
+        }while (!checkAction);
         if(checkAction) {
             launcher();
         }
@@ -199,6 +199,6 @@ public class CustomerView {
                     checkActionContinue = false;
             }
         } while (!checkActionContinue);
-        return false;
+        return true;
     }
 }
