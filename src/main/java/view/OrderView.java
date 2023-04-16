@@ -44,8 +44,8 @@ public class OrderView {
         foodView.showFoodList();
         List<Food> foods = foodService.getAllFood();
         List<User> users = userService.getAllUserUse();
-        List<Order> orderAll = orderService.getAllOderAll();
-        List<Order> orders = orderService.getAllOder();
+        List<Order> orderAll = orderService.getAllOrderAll();
+        List<Order> orders = orderService.getAllOrder();
         orderAll.sort(new SortOderById());
         Order order = new Order();
         Order orderNew = new Order();
@@ -363,8 +363,8 @@ public class OrderView {
 
         CustomerView customerView = new CustomerView();
         List<Food> foods = foodService.getAllFood();
-        List<Order> orderAll = orderService.getAllOderAll();
-        List<Order> orders = orderService.getAllOder();
+        List<Order> orderAll = orderService.getAllOrderAll();
+        List<Order> orders = orderService.getAllOrder();
         List<User> users = userService.getAllUserUse();
         int count = 0;
         for (int i = 0; i < orders.size(); i++) {
@@ -411,7 +411,7 @@ public class OrderView {
                 }else {
                     continue;
                 }
-                int checkIdOrder = foodService.checkIdFood(idOrder);
+                int checkIdOrder = orderService.checkIdOrder(idOrder);
                 switch (checkIdOrder) {
                     case 1:
                         for (int i = 0; i < orders.size(); i++) {
@@ -483,8 +483,8 @@ public class OrderView {
     public void deleteFoodOutOderByIdOder() throws IOException {
         CustomerView customerView = new CustomerView();
         List<Food> foods = foodService.getAllFood();
-        List<Order> orderAll = orderService.getAllOderAll();
-        List<Order> orders = orderService.getAllOder();
+        List<Order> orderAll = orderService.getAllOrderAll();
+        List<Order> orders = orderService.getAllOrder();
         List<User> users = userService.getAllUserUse();
         int count = 0;
         for (int i = 0; i < orders.size(); i++) {
@@ -532,10 +532,10 @@ public class OrderView {
                 }else {
                     continue;
                 }
-                int checkIdOrder = foodService.checkIdFood(idOrder);
+                int checkIdOrder = orderService.checkIdOrder(idOrder);
                 switch (checkIdOrder) {
                     case 1:
-                        orderService.deleteFoodOutOderById(idOrder);
+                        orderService.deleteFoodOutOrderById(idOrder);
                         for (int i = 0; i < orders.size(); i++) {
                             if (orders.get(i).getIdOrder() == idOrder) {
                                 nameFood = orders.get(i).getNameFood();
@@ -546,7 +546,7 @@ public class OrderView {
                                 idOderAll = orderAll.get(i).getIdOrder();
                             }
                         }
-                        orderService.deleteFoodOutOderAllById(idOderAll);
+                        orderService.deleteFoodOutOrderAllById(idOderAll);
                         checkId = true;
                         break;
                     case -1:
@@ -561,7 +561,7 @@ public class OrderView {
     }
     public void findOderById() throws IOException {
         AdminView adminView = new AdminView();
-        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOrderAll();
         noChange();
         int idOrder = 0;
         boolean checkIdOrder = false;
@@ -577,7 +577,7 @@ public class OrderView {
             }else {
                 continue;
             }
-            int select = orderService.checkIdOderAll(idOrder);
+            int select = orderService.checkIdOrderAll(idOrder);
             switch (select) {
                 case 1:
                     System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
@@ -601,7 +601,7 @@ public class OrderView {
     }
 
     public void showOderNow() throws IOException {
-        List<Order> orders = orderService.getAllOder();
+        List<Order> orders = orderService.getAllOrder();
         List<User> users = userService.getAllUserUse();
         System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
         System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
@@ -617,7 +617,7 @@ public class OrderView {
 
     public void showHistoryOder() throws IOException {
         CustomerView customerView = new CustomerView();
-        List<Order> orders = orderService.getAllOder();
+        List<Order> orders = orderService.getAllOrder();
         List<User> users = userService.getAllUserUse();
         int count = 0;
         for (int i = 0; i < orders.size(); i++) {
@@ -659,7 +659,7 @@ public class OrderView {
     }
 
     public void showHistoryOderPaid() throws IOException {
-        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOrderAll();
         List<User> users = userService.getAllUserUse();
         int count = 0;
         for (int i = 0; i < orderAll.size(); i++) {
@@ -685,9 +685,9 @@ public class OrderView {
     public void payOder() throws IOException {
         FileService fileService = new FileService();
         CustomerView customerView = new CustomerView();
-        List<Order> orders = orderService.getAllOder();
+        List<Order> orders = orderService.getAllOrder();
         List<Order> ordersNew = new ArrayList<>();
-        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOrderAll();
         List<User> users = userService.getAllUserUse();
         double totalMoney = 0;
         int count = 0;
@@ -751,7 +751,7 @@ public class OrderView {
     public void showRevenueByDay() throws IOException {
         AdminView adminView = new AdminView();
         noChange();
-        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOrderAll();
         if (orderAll.isEmpty()) {
             System.out.println("Doanh thu hiện tại không có!");
         } else {
@@ -798,7 +798,7 @@ public class OrderView {
     public void showRevenueByMonth() throws IOException {
         AdminView adminView = new AdminView();
         noChange();
-        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOrderAll();
         if (orderAll.isEmpty()) {
             System.out.println("Doanh thu hiện tại không có!");
         } else {
@@ -843,7 +843,7 @@ public class OrderView {
     }
 
     public void showTotalRevenue() throws IOException {
-        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOrderAll();
         if(orderAll.isEmpty()) {
             System.out.println("Doanh thu hiện tại không có!");
         }else {
@@ -866,7 +866,7 @@ public class OrderView {
     }
 
     public void showOderAll() throws IOException {
-        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOrderAll();
         if (orderAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
@@ -881,7 +881,7 @@ public class OrderView {
     }
 
     public void showOderUnPaid() throws IOException {
-        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOrderAll();
         if (orderAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
@@ -898,7 +898,7 @@ public class OrderView {
     }
 
     public void showOderPaid() throws IOException {
-        List<Order> orderAll = orderService.getAllOderAll();
+        List<Order> orderAll = orderService.getAllOrderAll();
         if (orderAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
