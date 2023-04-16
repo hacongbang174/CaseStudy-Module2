@@ -57,7 +57,7 @@ public class CustomerView {
             }
             switch (select) {
                 case 1:
-                    foodView.showFoodList();
+                    foodView.showFoodListStepFood();
                     checkAction = checkActionContinue();
                     break;
                 case 2:

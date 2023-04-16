@@ -57,7 +57,7 @@ public class FoodView {
             }
             switch (select) {
                 case 1:
-                    showFoodList();
+                    showFoodListStepFood();
                     checkAction = checkActionContinue();
                     break;
                 case 2:
@@ -658,7 +658,7 @@ public class FoodView {
                 checkShow2 = false;
             }
         }while (!checkShow2);
-
+        System.out.println("Finished!");
     }
     public void showFoodList(List<Food> foods) throws IOException {
         System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
@@ -677,7 +677,7 @@ public class FoodView {
         boolean checkType = false;
         do {
             noChange();
-            System.out.println("Nhập danh mục cần thêm! \"drink\" or \"bakery\":");
+            System.out.println("Nhập danh mục cần xem! \"drink\" or \"bakery\":");
             typeOfFood = scanner.nextLine();
             if(typeOfFood.equals("0")){
                 checkType = true;
@@ -717,7 +717,7 @@ public class FoodView {
         boolean checkKW = false;
         do {
             noChange();
-            System.out.println("Nhập tên bạn muốn tìm kiếm: ");
+            System.out.println("Nhập keyword bạn muốn tìm kiếm: ");
             String kw = scanner.nextLine();
             if(kw.equals("0")) {
                 checkKW = true;

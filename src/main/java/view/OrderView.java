@@ -8,11 +8,13 @@ import service.FileService;
 import service.FoodService;
 import service.OrderService;
 import service.UserService;
+import utils.CurrencyFormat;
 import utils.DateFormat;
 import utils.SortOderById;
 import utils.ValidateUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -627,7 +629,7 @@ public class OrderView {
             System.out.println("Chưa có đơn hàng, mời bạn thêm món để thực hiện chức năng này!");
             boolean checkEdit = false;
             do {
-                System.out.println("Nhập \"Y\" để thêm món hoăc \"exit\" để quay lại! ");
+                System.out.println("Nhập \"Y\" để thêm món hoăc \"0\" để quay lại! ");
                 String input = scanner.nextLine();
                 switch (input.toUpperCase()) {
                     case "Y":
@@ -684,12 +686,13 @@ public class OrderView {
         FileService fileService = new FileService();
         CustomerView customerView = new CustomerView();
         List<Order> orders = orderService.getAllOder();
+        List<Order> ordersNew = new ArrayList<>();
         List<Order> orderAll = orderService.getAllOderAll();
         List<User> users = userService.getAllUserUse();
         double totalMoney = 0;
         int count = 0;
         for (int i = 0; i < orders.size(); i++) {
-            if (orders.get(i).getIdCustomer() == users.get(i).getId()) {
+            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
                 count += 1;
             }
         }
@@ -726,20 +729,21 @@ public class OrderView {
                 }
             }
             System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-            System.out.printf("            ║                                                TỔNG TIỀN CẦN THANH TOÁN                                                ║ %-13s ║                                                ║", totalMoney).println();
+            System.out.printf("            ║                                                TỔNG TIỀN CẦN THANH TOÁN                                                ║ %-13s ║                                                ║", CurrencyFormat.covertPriceToString(totalMoney)).println();
             System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
             for (int i = 0; i < orderAll.size(); i++) {
                 if (orderAll.get(i).getIdCustomer() == users.get(0).getId()) {
                     orderAll.get(i).setStatus(EStatus.PAID);
                 }
             }
+
             for (int i = 0; i < orders.size(); i++) {
-                if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
-                    orders.remove(i);
+                if (orders.get(i).getIdCustomer() != users.get(0).getId()) {
+                    ordersNew.add(orders.get(i));
                 }
             }
         }
-        fileService.writeData(FILE_PATH_ORDER, orders);
+        fileService.writeData(FILE_PATH_ORDER, ordersNew);
         fileService.writeData(FILE_PATH_ODERALL, orderAll);
         System.out.println("✔ Bạn đã thanh toán thành công ✔\n");
     }
@@ -785,7 +789,7 @@ public class OrderView {
                     }
                 }
                 System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-                System.out.printf("            ║                                                  TỔNG DOANH THU THEO NGÀY                                              ║ %-13s ║                                                ║", totalRevenueByDay).println();
+                System.out.printf("            ║                                                  TỔNG DOANH THU THEO NGÀY                                              ║ %-13s ║                                                ║", CurrencyFormat.covertPriceToString(totalRevenueByDay)).println();
                 System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
             }
         }
@@ -832,7 +836,7 @@ public class OrderView {
                     }
                 }
                 System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-                System.out.printf("            ║                                                  TỔNG DOANH THU THEO NGÀY                                              ║ %-13s ║                                                ║", totalRevenueByMonth).println();
+                System.out.printf("            ║                                                  TỔNG DOANH THU THEO NGÀY                                              ║ %-13s ║                                                ║", CurrencyFormat.covertPriceToString(totalRevenueByMonth)).println();
                 System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
             }
         }
@@ -856,7 +860,7 @@ public class OrderView {
                 }
             }
             System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-            System.out.printf("            ║                                                            TỔNG DOANH THU                                              ║ %-13s ║                                                ║", totalRevenue).println();
+            System.out.printf("            ║                                                            TỔNG DOANH THU                                              ║ %-13s ║                                                ║", CurrencyFormat.covertPriceToString(totalRevenue)).println();
             System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
         }
     }
