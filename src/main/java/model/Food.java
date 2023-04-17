@@ -33,7 +33,7 @@ public class Food implements IModel<Food> {
     }
 
     public String getNameFood() {
-        return nameFood;
+        return this.nameFood;
     }
 
     public void setNameFood(String nameFood) {

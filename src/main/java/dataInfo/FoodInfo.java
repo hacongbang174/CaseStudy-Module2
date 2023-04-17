@@ -81,7 +81,7 @@ public class FoodInfo {
             bufferedReader.close();
         }
     }
-    public  void writeToFile(String path, List<String> list) throws IOException {
+    public void writeToFile(String path, List<String> list) throws IOException {
         try (
                 Writer fos = new OutputStreamWriter(
                         new FileOutputStream(path), "UTF-8");

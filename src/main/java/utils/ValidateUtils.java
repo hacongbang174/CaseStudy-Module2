@@ -41,7 +41,7 @@ public class ValidateUtils {
         return Pattern.matches(MONTH_REGEX,month);
     }
     public static boolean isPassWord(String password) {
-        return Pattern.matches(PHONENUMBER_REGEX, password);
+        return Pattern.matches(PASSWORD_REGEX, password);
     }
     public static boolean isValidPrice(double price) {
         if (price > 0 && price < 200000) {
